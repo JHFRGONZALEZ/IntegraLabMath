@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, Trophy, Star, ArrowRight, RotateCcw } from 'lucide-react';
-import MathTex from './Math';
+import { renderMath } from './Math';
 
 interface Exercise {
   id: number;
@@ -206,7 +206,7 @@ export default function Exercises() {
 
           <h3 className="text-lg font-semibold text-white mb-2">{exercise.question}</h3>
           <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
-            <MathTex tex={exercise.expression} display={true} />
+            <div dangerouslySetInnerHTML={{ __html: renderMath(exercise.expression, true) }} />
           </div>
 
           {/* Options */}
@@ -233,9 +233,7 @@ export default function Exercises() {
                   <span className="w-8 h-8 rounded-lg bg-[#0f3460] flex items-center justify-center text-sm font-bold flex-shrink-0">
                     {String.fromCharCode(65 + i)}
                   </span>
-                  <div className="overflow-x-auto flex-1">
-                    <MathTex tex={option} />
-                  </div>
+                  <div className="overflow-x-auto flex-1" dangerouslySetInnerHTML={{ __html: renderMath(option, false) }} />
                   {selectedOption !== null && i === exercise.correctIndex && (
                     <CheckCircle size={18} className="ml-auto text-emerald-400 flex-shrink-0" />
                   )}
@@ -255,9 +253,7 @@ export default function Exercises() {
               className="mt-4 step-card"
             >
               <h4 style={{ color: '#93c5fd' }}>💡 EXPLICACIÓN:</h4>
-              <div className="text-sm overflow-x-auto">
-                <MathTex tex={exercise.explanation} />
-              </div>
+              <div className="text-sm overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(exercise.explanation, false) }} />
             </motion.div>
           )}
 

@@ -1,5 +1,15 @@
-import { useMemo } from 'react';
 import katex from 'katex';
+
+export function renderMath(tex: string, display: boolean = false): string {
+  try {
+    return katex.renderToString(tex, {
+      displayMode: display,
+      throwOnError: false
+    });
+  } catch {
+    return tex;
+  }
+}
 
 interface MathProps {
   tex: string;
@@ -8,23 +18,8 @@ interface MathProps {
 }
 
 export default function Math({ tex, display = false, className = '' }: MathProps) {
-  const html = useMemo(() => {
-    try {
-      return katex.renderToString(tex, {
-        displayMode: display,
-        throwOnError: false,
-        trust: true,
-        strict: false,
-        macros: {
-          "\\sen": "\\operatorname{sen}",
-          "\\tg": "\\operatorname{tg}",
-        }
-      });
-    } catch {
-      return tex;
-    }
-  }, [tex, display]);
-
+  const html = renderMath(tex, display);
+  
   if (display) {
     return (
       <div 

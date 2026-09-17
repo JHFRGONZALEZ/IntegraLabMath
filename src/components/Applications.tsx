@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Ruler, Box, Gauge, DollarSign, Atom, Droplets } from 'lucide-react';
-import MathTex from './Math';
+import { renderMath } from './Math';
 
 interface Application {
   id: string;
@@ -229,7 +229,7 @@ export default function Applications() {
             
             <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
               <h4 style={{ color: '#93c5fd' }}>📐 FÓRMULA GENERAL</h4>
-              <MathTex tex={currentApp.formula} display={true} />
+              <div dangerouslySetInnerHTML={{ __html: renderMath(currentApp.formula, true) }} />
             </div>
           </div>
 
@@ -237,7 +237,7 @@ export default function Applications() {
           <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
             <h4 className="text-lg font-semibold text-white mb-3">📝 Ejemplo Resuelto</h4>
             <div className="step-card">
-              <MathTex tex={currentApp.example.problem} />
+              <div dangerouslySetInnerHTML={{ __html: renderMath(currentApp.example.problem, false) }} />
             </div>
             
             <button
@@ -259,15 +259,13 @@ export default function Applications() {
                       <span className="text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34, 197, 94, 0.2)', color: '#22c55e' }}>
                         {i + 1}
                       </span>
-                      <div className="text-sm overflow-x-auto">
-                        <MathTex tex={step} />
-                      </div>
+                      <div className="text-sm overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(step, false) }} />
                     </div>
                   </div>
                 ))}
                 <div className="step-card highlight">
                   <h4 style={{ color: '#fbbf24' }}>✅ RESULTADO:</h4>
-                  <MathTex tex={currentApp.example.result} display={true} />
+                  <div dangerouslySetInnerHTML={{ __html: renderMath(currentApp.example.result, true) }} />
                 </div>
               </motion.div>
             )}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import Math from './Math';
+import { renderMath } from './Math';
 
 interface Topic {
   id: string;
@@ -154,7 +154,7 @@ export default function Theory() {
                 {/* Formula */}
                 <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
                   <h4>📐 FÓRMULA</h4>
-                  <Math tex={topic.formula} display={true} />
+                  <div dangerouslySetInnerHTML={{ __html: renderMath(topic.formula, true) }} />
                 </div>
 
                 {/* Explanation */}
@@ -166,7 +166,7 @@ export default function Theory() {
                 {/* Example */}
                 <div className="step-card highlight">
                   <h4 style={{ color: '#fbbf24' }}>✏️ EJEMPLO</h4>
-                  <Math tex={topic.example} display={true} />
+                  <div dangerouslySetInnerHTML={{ __html: renderMath(topic.example, true) }} />
                 </div>
 
                 {/* Tips */}
@@ -176,9 +176,7 @@ export default function Theory() {
                     {topic.tips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
                         <span style={{ color: '#e94560' }}>•</span>
-                        <span className="overflow-x-auto">
-                          <Math tex={tip} />
-                        </span>
+                        <span dangerouslySetInnerHTML={{ __html: renderMath(tip, false) }} />
                       </li>
                     ))}
                   </ul>

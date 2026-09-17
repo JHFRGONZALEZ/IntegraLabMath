@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, XCircle, Lightbulb, RotateCcw, Calculator } from 'lucide-react';
-import Math from './Math';
+import { renderMath } from './Math';
 
 interface IntegralProblem {
   id: number;
@@ -214,7 +214,7 @@ export default function IntegralCalculator() {
 
           <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
             <h4 style={{ color: '#93c5fd' }}>RESOLVER:</h4>
-            <Math tex={problem.expression} display={true} />
+            <div dangerouslySetInnerHTML={{ __html: renderMath(problem.expression, true) }} />
           </div>
 
           {/* Answer Input */}
@@ -263,7 +263,7 @@ export default function IntegralCalculator() {
                 </span>
               </div>
               <p className="text-sm text-slate-400 mb-2">Respuesta correcta:</p>
-              <Math tex={problem.answer} display={true} />
+              <div dangerouslySetInnerHTML={{ __html: renderMath(problem.answer, true) }} />
             </motion.div>
           )}
         </motion.div>
@@ -285,7 +285,7 @@ export default function IntegralCalculator() {
                 animate={{ opacity: 1 }}
                 className="mt-3 step-card"
               >
-                💡 <Math tex={problem.hint} />
+                <span>💡 </span><span dangerouslySetInnerHTML={{ __html: renderMath(problem.hint, false) }} />
               </motion.div>
             )}
           </div>
@@ -311,9 +311,7 @@ export default function IntegralCalculator() {
                       <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(59, 130, 246, 0.2)' }}>
                         <span className="text-xs font-bold text-blue-400">{i + 1}</span>
                       </div>
-                      <div className="text-sm overflow-x-auto">
-                        <Math tex={step} />
-                      </div>
+                      <div className="text-sm overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(step, false) }} />
                     </div>
                   </div>
                 ))}
@@ -327,9 +325,7 @@ export default function IntegralCalculator() {
             className="w-full bg-[#0f3460]/50 border border-[#0f3460] rounded-xl p-4 text-left hover:border-[#e94560]/50 transition-all group"
           >
             <p className="text-sm text-slate-400">Siguiente problema →</p>
-            <div className="mt-1 overflow-x-auto">
-              <Math tex={problems[(selectedProblem + 1) % problems.length].expression} />
-            </div>
+            <div className="mt-1 overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(problems[(selectedProblem + 1) % problems.length].expression, false) }} />
           </button>
         </div>
       </div>

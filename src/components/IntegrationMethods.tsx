@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowRight } from 'lucide-react';
-import Math from './Math';
+import { renderMath } from './Math';
 
 interface Method {
   id: string;
@@ -256,7 +256,7 @@ export default function IntegrationMethods() {
           {/* Formula */}
           <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
             <h4 style={{ color: '#93c5fd' }}>📐 FÓRMULA GENERAL</h4>
-            <Math tex={currentMethod.formula} display={true} />
+            <div dangerouslySetInnerHTML={{ __html: renderMath(currentMethod.formula, true) }} />
           </div>
 
           {/* Steps */}
@@ -269,9 +269,7 @@ export default function IntegrationMethods() {
                     <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34, 197, 94, 0.2)' }}>
                       <span className="text-xs font-bold" style={{ color: '#22c55e' }}>{i + 1}</span>
                     </div>
-                    <div className="text-sm overflow-x-auto">
-                      <Math tex={step} />
-                    </div>
+                    <div className="text-sm overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(step, false) }} />
                   </div>
                 </div>
               ))}
@@ -289,9 +287,7 @@ export default function IntegrationMethods() {
                   onClick={() => setShowExample(showExample === i ? null : i)}
                   className="w-full flex items-center justify-between p-4 bg-[#0f0f23]/50 hover:bg-[#0f3460]/30 transition-colors"
                 >
-                  <div className="overflow-x-auto">
-                    <Math tex={ex.problem} />
-                  </div>
+                  <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(ex.problem, false) }} />
                   <ChevronRight size={16} className={`text-slate-400 transition-transform flex-shrink-0 ml-2 ${showExample === i ? 'rotate-90' : ''}`} />
                 </button>
                 {showExample === i && (
@@ -303,14 +299,12 @@ export default function IntegrationMethods() {
                     {ex.steps.map((step, j) => (
                       <div key={j} className="flex items-center gap-2 text-sm">
                         <ArrowRight size={12} className="text-[#22c55e] flex-shrink-0" />
-                        <div className="overflow-x-auto">
-                          <Math tex={step} />
-                        </div>
+                        <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: renderMath(step, false) }} />
                       </div>
                     ))}
                     <div className="mt-3 pt-3 border-t border-[#0f3460]/30">
                       <span className="text-sm text-slate-400">Resultado: </span>
-                      <Math tex={ex.result} className="text-emerald-300 font-semibold" />
+                      <span className="text-emerald-300 font-semibold" dangerouslySetInnerHTML={{ __html: renderMath(ex.result, false) }} />
                     </div>
                   </motion.div>
                 )}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import MathTex from './Math';
+import { renderMath } from './Math';
 
 // ============ TYPES ============
 interface FuncDef {
@@ -660,25 +660,25 @@ export default function Graphs() {
     return (
       <div className="space-y-3">
         {/* Step 1 */}
-        <div className="p-3 bg-[#0f3460]/30 rounded-lg">
-          <h4 className="text-xs font-bold text-blue-300 mb-2">PASO 1: Identificación</h4>
-          <p className="text-sm text-slate-300 mb-1">Función: <MathTex tex={fnLabel} /></p>
-          <p className="text-sm text-slate-300 mb-1">Intervalo: <MathTex tex={`[${a},\\,${b}]`} /></p>
-          <p className="text-sm text-slate-300 mb-1">Subintervalos: <MathTex tex={`n = ${n}`} /></p>
+        <div className="step-card">
+          <h4>PASO 1: IDENTIFICACIÓN</h4>
+          <p className="text-sm text-slate-300 mb-1">Función: <span dangerouslySetInnerHTML={{ __html: renderMath(fnLabel, false) }} /></p>
+          <p className="text-sm text-slate-300 mb-1">Intervalo: <span dangerouslySetInnerHTML={{ __html: renderMath(`[${a},\\,${b}]`, false) }} /></p>
+          <p className="text-sm text-slate-300 mb-1">Subintervalos: <span dangerouslySetInnerHTML={{ __html: renderMath(`n = ${n}`, false) }} /></p>
           <p className="text-sm text-slate-300">Tipo: <span className="text-purple-300">{TYPE_LABELS[type]}</span></p>
         </div>
 
         {/* Step 2 */}
-        <div className="p-3 bg-[#0f3460]/30 rounded-lg">
-          <h4 className="text-xs font-bold text-blue-300 mb-2">PASO 2: Cálculo de Δx</h4>
-          <MathTex tex="\Delta x = \frac{b - a}{n}" display={true} />
-          <MathTex tex={`\\Delta x = \\frac{${b} - ${a}}{${n}} = ${dx.toFixed(6)}`} display={true} />
+        <div className="step-card">
+          <h4>PASO 2: CÁLCULO DE Δx</h4>
+          <div dangerouslySetInnerHTML={{ __html: renderMath('\\Delta x = \\frac{b - a}{n}', true) }} />
+          <div dangerouslySetInnerHTML={{ __html: renderMath(`\\Delta x = \\frac{${b} - ${a}}{${n}} = ${dx.toFixed(6)}`, true) }} />
         </div>
 
         {/* Step 3 */}
-        <div className="p-3 bg-[#0f3460]/30 rounded-lg">
-          <h4 className="text-xs font-bold text-blue-300 mb-2">PASO 3: Puntos de evaluación</h4>
-          <MathTex tex={pointFormula} display={true} />
+        <div className="step-card">
+          <h4>PASO 3: PUNTOS DE EVALUACIÓN</h4>
+          <div dangerouslySetInnerHTML={{ __html: renderMath(pointFormula, true) }} />
           <p className="text-xs text-slate-400 font-mono mt-2">
             Primeros: {result.points.slice(0, Math.min(5, n)).map(p => p.x.toFixed(3)).join(', ')}
             {n > 5 ? ' ... ' + result.points.slice(-2).map(p => p.x.toFixed(3)).join(', ') : ''}
@@ -686,16 +686,16 @@ export default function Graphs() {
         </div>
 
         {/* Step 4 */}
-        <div className="p-3 bg-[#0f3460]/30 rounded-lg">
-          <h4 className="text-xs font-bold text-blue-300 mb-2">PASO 4: Tabla de valores</h4>
+        <div className="step-card">
+          <h4>PASO 4: TABLA DE VALORES</h4>
           <div className="overflow-x-auto">
             <table className="w-full text-xs font-mono">
               <thead>
                 <tr className="text-slate-400 border-b border-[#0f3460]">
                   <th className="text-left p-1">i</th>
-                  <th className="text-right p-1"><MathTex tex="x_i^*" /></th>
-                  <th className="text-right p-1"><MathTex tex="f(x_i^*)" /></th>
-                  <th className="text-right p-1"><MathTex tex="f(x_i^*)\cdot\Delta x" /></th>
+                  <th className="text-right p-1"><span dangerouslySetInnerHTML={{ __html: renderMath('x_i^*', false) }} /></th>
+                  <th className="text-right p-1"><span dangerouslySetInnerHTML={{ __html: renderMath('f(x_i^*)', false) }} /></th>
+                  <th className="text-right p-1"><span dangerouslySetInnerHTML={{ __html: renderMath('f(x_i^*)\\cdot\\Delta x', false) }} /></th>
                 </tr>
               </thead>
               <tbody>
@@ -726,53 +726,44 @@ export default function Graphs() {
         </div>
 
         {/* Step 5 */}
-        <div className="p-3 bg-[#0f3460]/30 rounded-lg">
-          <h4 className="text-xs font-bold text-blue-300 mb-2">PASO 5: Suma</h4>
-          <MathTex tex="S_n = \sum_{i=1}^{n} f(x_i^*) \cdot \Delta x" display={true} />
+        <div className="step-card">
+          <h4>PASO 5: SUMA</h4>
+          <div dangerouslySetInnerHTML={{ __html: renderMath('S_n = \\sum_{i=1}^{n} f(x_i^*) \\cdot \\Delta x', true) }} />
           <p className="text-xs text-slate-400 font-mono break-all mt-1">
             Sₙ = {result.points.slice(0, Math.min(4, n)).map(p => p.area.toFixed(4)).join(' + ')}
             {n > 4 ? ' + ...' : ''}
           </p>
-          <MathTex tex={`\\boxed{S_{${n}} = ${result.sum.toFixed(6)}}`} display={true} />
+          <div dangerouslySetInnerHTML={{ __html: renderMath(`\\boxed{S_{${n}} = ${result.sum.toFixed(6)}}`, true) }} />
         </div>
 
         {/* Step 6 */}
         {showExact && exactValue !== null && (
-          <div className="p-3 bg-[#0f3460]/30 rounded-lg border border-amber-500/30">
-            <h4 className="text-xs font-bold text-amber-400 mb-2">PASO 6: Límite (Integral Exacta)</h4>
-            <MathTex tex="\int_a^b f(x)\,dx = \lim_{n\to\infty} S_n" display={true} />
-            <p className="text-sm text-slate-300 mt-2">Antiderivada: <MathTex tex={fnDef.antiLabel} /></p>
-            <MathTex
-              tex={`F(${b}) - F(${a}) = ${fnDef.anti(b).toFixed(4)} - ${fnDef.anti(a).toFixed(4)}`}
-              display={true}
-            />
-            <MathTex
-              tex={`\\boxed{\\int_{${a}}^{${b}} f(x)\\,dx = ${exactValue.toFixed(6)}}`}
-              display={true}
-            />
+          <div className="step-card highlight">
+            <h4 style={{ color: '#fbbf24' }}>PASO 6: LÍMITE (INTEGRAL EXACTA)</h4>
+            <div dangerouslySetInnerHTML={{ __html: renderMath('\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty} S_n', true) }} />
+            <p className="text-sm text-slate-300 mt-2">Antiderivada: <span dangerouslySetInnerHTML={{ __html: renderMath(fnDef.antiLabel, false) }} /></p>
+            <div dangerouslySetInnerHTML={{ __html: renderMath(`F(${b}) - F(${a}) = ${fnDef.anti(b).toFixed(4)} - ${fnDef.anti(a).toFixed(4)}`, true) }} />
+            <div dangerouslySetInnerHTML={{ __html: renderMath(`\\boxed{\\int_{${a}}^{${b}} f(x)\\,dx = ${exactValue.toFixed(6)}}`, true) }} />
           </div>
         )}
 
         {/* Step 7 */}
         {showExact && error !== null && (
-          <div className="p-3 bg-[#0f3460]/30 rounded-lg border border-red-500/30">
-            <h4 className="text-xs font-bold text-red-400 mb-2">PASO 7: Error</h4>
-            <MathTex
-              tex={`\\text{Error} = |S_n - \\text{Exacto}| = |${result.sum.toFixed(6)} - ${exactValue?.toFixed(6)}|`}
-              display={true}
-            />
-            <MathTex tex={`\\boxed{\\text{Error} = ${error.toFixed(6)}}`} display={true} />
+          <div className="step-card error">
+            <h4 style={{ color: '#f87171' }}>PASO 7: ERROR</h4>
+            <div dangerouslySetInnerHTML={{ __html: renderMath(`\\text{Error} = |S_n - \\text{Exacto}| = |${result.sum.toFixed(6)} - ${exactValue?.toFixed(6)}|`, true) }} />
+            <div dangerouslySetInnerHTML={{ __html: renderMath(`\\boxed{\\text{Error} = ${error.toFixed(6)}}`, true) }} />
             {errorRel !== null && (
-              <MathTex tex={`\\text{Error relativo} = ${errorRel.toFixed(4)}\\%`} display={true} />
+              <div dangerouslySetInnerHTML={{ __html: renderMath(`\\text{Error relativo} = ${errorRel.toFixed(4)}\\%`, true) }} />
             )}
           </div>
         )}
 
         {/* Formula */}
-        <div className="p-3 bg-[#e94560]/10 rounded-lg border border-[#e94560]/30">
-          <h4 className="text-xs font-bold text-[#e94560] mb-2">🎯 Fórmula General</h4>
-          <MathTex tex="\int_a^b f(x)\,dx = \lim_{n\to\infty} \sum_{i=1}^{n} f(x_i^*) \cdot \Delta x" display={true} />
-          <MathTex tex="\text{donde } \Delta x = \frac{b-a}{n}" display={true} />
+        <div className="step-card formula">
+          <h4 style={{ color: '#e94560' }}>🎯 FÓRMULA GENERAL</h4>
+          <div dangerouslySetInnerHTML={{ __html: renderMath('\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty} \\sum_{i=1}^{n} f(x_i^*) \\cdot \\Delta x', true) }} />
+          <div dangerouslySetInnerHTML={{ __html: renderMath('\\text{donde } \\Delta x = \\frac{b-a}{n}', true) }} />
         </div>
       </div>
     );
@@ -842,7 +833,7 @@ export default function Graphs() {
               <p className="text-xs text-red-300 mt-2 bg-red-900/20 p-2 rounded border border-red-500/30">{customError}</p>
             )}
             <div className="mt-2 p-2 bg-[#0f3460]/50 rounded text-center">
-              <MathTex tex={useCustom ? `f(x) = ${customFn || '?'}` : FUNCTIONS[fnKey].latex} />
+              <span dangerouslySetInnerHTML={{ __html: renderMath(useCustom ? `f(x) = ${customFn || '?'}` : FUNCTIONS[fnKey].latex, false) }} />
             </div>
           </div>
 

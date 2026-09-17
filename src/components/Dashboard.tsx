@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Calculator, BarChart3, Award, GraduationCap, Zap, TrendingUp, Users, Clock } from 'lucide-react';
-import Math from './Math';
+import { renderMath } from './Math';
 
 type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications';
 
@@ -128,7 +128,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       >
         <h3 className="text-lg font-semibold text-white mb-4">📐 Fórmula del Día</h3>
         <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
-          <Math tex="\int x^n\,dx = \frac{x^{n+1}}{n+1} + C, \quad \text{donde } n \neq -1" display={true} />
+          <div dangerouslySetInnerHTML={{ __html: renderMath("\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C, \\quad \\text{donde } n \\neq -1", true) }} />
         </div>
         <p className="text-sm text-slate-400 mt-3 text-center">
           Regla de la potencia — La base de toda integración
