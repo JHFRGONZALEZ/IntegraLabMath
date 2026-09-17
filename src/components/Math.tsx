@@ -18,6 +18,10 @@ export default function Math({ tex, display = false, className = '' }: MathProps
           throwOnError: false,
           trust: true,
           strict: false,
+          macros: {
+            "\\sen": "\\operatorname{sen}",
+            "\\tg": "\\operatorname{tg}",
+          }
         });
       } catch (error) {
         console.error('KaTeX render error:', error);
@@ -31,7 +35,7 @@ export default function Math({ tex, display = false, className = '' }: MathProps
   return (
     <span 
       ref={mathRef} 
-      className={`${display ? 'math-display block text-center my-2' : 'inline-block'} ${className}`}
+      className={`math-rendered ${display ? 'math-display' : 'math-inline'} ${className}`}
     />
   );
 }

@@ -34,6 +34,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -49,14 +50,49 @@ body {
   background: #64748b;
 }
 
-.katex {
-  font-size: 1.1em !important;
+/* KaTeX Styles */
+.math-rendered {
+  line-height: 1.4;
+}
+
+.math-inline .katex {
+  font-size: 1.05em !important;
+  color: inherit;
 }
 
 .math-display .katex {
-  font-size: 1.3em !important;
+  font-size: 1.4em !important;
+  color: inherit;
 }
 
+.math-display {
+  display: block;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* Override KaTeX colors to inherit from parent */
+.katex {
+  color: inherit !important;
+}
+
+.katex .mord,
+.katex .mbin,
+.katex .mrel,
+.katex .mopen,
+.katex .mclose,
+.katex .mpunct,
+.katex .minner {
+  color: inherit !important;
+}
+
+/* Scrollable math containers */
+.overflow-x-auto .katex-display {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Animations */
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
   50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
@@ -73,4 +109,56 @@ body {
 
 .float-animation {
   animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* SVG Graph styles */
+svg text {
+  font-family: 'Inter', -apple-system, sans-serif;
+  user-select: none;
+}
+
+/* Range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #334155;
+  border-radius: 3px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  transition: all 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
 }
