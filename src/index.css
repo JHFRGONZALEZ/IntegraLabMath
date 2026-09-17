@@ -131,7 +131,7 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
-  background: #334155;
+  background: #0f3460;
   border-radius: 3px;
   outline: none;
 }
@@ -142,23 +142,28 @@ input[type="range"]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #e94560;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 10px rgba(233, 69, 96, 0.4);
   transition: all 0.2s;
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.6);
 }
 
 input[type="range"]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #e94560;
   cursor: pointer;
   border: none;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 10px rgba(233, 69, 96, 0.4);
+}
+
+/* Riemann visualizer - canvas background */
+canvas {
+  image-rendering: auto;
 }
