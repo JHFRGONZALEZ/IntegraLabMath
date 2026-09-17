@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useMemo } from 'react';
 import katex from 'katex';
 
 interface MathProps {
@@ -8,34 +8,36 @@ interface MathProps {
 }
 
 export default function Math({ tex, display = false, className = '' }: MathProps) {
-  const mathRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (mathRef.current) {
-      try {
-        katex.render(tex, mathRef.current, {
-          displayMode: display,
-          throwOnError: false,
-          trust: true,
-          strict: false,
-          macros: {
-            "\\sen": "\\operatorname{sen}",
-            "\\tg": "\\operatorname{tg}",
-          }
-        });
-      } catch (error) {
-        console.error('KaTeX render error:', error);
-        if (mathRef.current) {
-          mathRef.current.textContent = tex;
+  const html = useMemo(() => {
+    try {
+      return katex.renderToString(tex, {
+        displayMode: display,
+        throwOnError: false,
+        trust: true,
+        strict: false,
+        macros: {
+          "\\sen": "\\operatorname{sen}",
+          "\\tg": "\\operatorname{tg}",
         }
-      }
+      });
+    } catch {
+      return tex;
     }
   }, [tex, display]);
 
+  if (display) {
+    return (
+      <div 
+        className={`math-block ${className}`}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
+  }
+
   return (
     <span 
-      ref={mathRef} 
-      className={`math-rendered ${display ? 'math-display' : 'math-inline'} ${className}`}
+      className={`math-inline ${className}`}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }

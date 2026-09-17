@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, Lightbulb, AlertTriangle, CheckCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import Math from './Math';
 
 interface Topic {
@@ -101,7 +101,7 @@ export default function Theory() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20">
+      <div className="bg-gradient-to-r from-[#e94560]/10 to-red-600/10 rounded-xl p-6 border border-[#e94560]/20">
         <h2 className="text-2xl font-bold text-white mb-2">📚 Fundamentos Teóricos</h2>
         <p className="text-slate-300">
           Domina los conceptos fundamentales del cálculo integral. Cada tema incluye definición formal, 
@@ -117,15 +117,15 @@ export default function Theory() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden"
+            className="bg-[#16213e]/70 rounded-xl border border-[#0f3460]/50 overflow-hidden"
           >
             {/* Topic Header */}
             <button
               onClick={() => setExpandedTopic(expandedTopic === topic.id ? null : topic.id)}
-              className="w-full flex items-center justify-between p-5 text-left hover:bg-slate-700/20 transition-colors"
+              className="w-full flex items-center justify-between p-5 text-left hover:bg-[#0f3460]/20 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">
+                <div className="w-8 h-8 rounded-lg bg-[#e94560]/20 flex items-center justify-center text-[#e94560] font-bold text-sm">
                   {index + 1}
                 </div>
                 <h3 className="text-lg font-semibold text-white">{topic.title}</h3>
@@ -143,58 +143,39 @@ export default function Theory() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="px-5 pb-5 space-y-4"
+                className="px-5 pb-5 space-y-3"
               >
                 {/* Definition */}
-                <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle size={16} className="text-emerald-400" />
-                    <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wide">Definición</span>
-                  </div>
-                  <p className="text-slate-300">{topic.definition}</p>
+                <div className="step-card">
+                  <h4>📖 DEFINICIÓN</h4>
+                  <p>{topic.definition}</p>
                 </div>
 
                 {/* Formula */}
-                <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg p-4 border border-blue-500/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">📐</span>
-                    <span className="text-sm font-semibold text-blue-400 uppercase tracking-wide">Fórmula</span>
-                  </div>
-                  <div className="py-2 overflow-x-auto">
-                    <Math tex={topic.formula} display={true} />
-                  </div>
+                <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
+                  <h4>📐 FÓRMULA</h4>
+                  <Math tex={topic.formula} display={true} />
                 </div>
 
                 {/* Explanation */}
-                <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Lightbulb size={16} className="text-amber-400" />
-                    <span className="text-sm font-semibold text-amber-400 uppercase tracking-wide">Explicación</span>
-                  </div>
-                  <p className="text-slate-300">{topic.explanation}</p>
+                <div className="step-card">
+                  <h4 style={{ color: '#fbbf24' }}>💡 EXPLICACIÓN</h4>
+                  <p>{topic.explanation}</p>
                 </div>
 
                 {/* Example */}
-                <div className="bg-emerald-900/20 rounded-lg p-4 border border-emerald-500/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">✏️</span>
-                    <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wide">Ejemplo</span>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <Math tex={topic.example} display={true} className="text-emerald-200" />
-                  </div>
+                <div className="step-card highlight">
+                  <h4 style={{ color: '#fbbf24' }}>✏️ EJEMPLO</h4>
+                  <Math tex={topic.example} display={true} />
                 </div>
 
                 {/* Tips */}
-                <div className="bg-amber-900/10 rounded-lg p-4 border border-amber-500/20">
-                  <div className="flex items-center gap-2 mb-3">
-                    <AlertTriangle size={16} className="text-amber-400" />
-                    <span className="text-sm font-semibold text-amber-400 uppercase tracking-wide">Puntos Clave</span>
-                  </div>
-                  <ul className="space-y-2">
+                <div className="step-card formula">
+                  <h4 style={{ color: '#e94560' }}>⚠️ PUNTOS CLAVE</h4>
+                  <ul className="space-y-2 mt-2">
                     {topic.tips.map((tip, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
-                        <span className="text-amber-400 mt-0.5">•</span>
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <span style={{ color: '#e94560' }}>•</span>
                         <span className="overflow-x-auto">
                           <Math tex={tip} />
                         </span>

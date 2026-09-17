@@ -124,17 +124,15 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/30"
+        className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50"
       >
         <h3 className="text-lg font-semibold text-white mb-4">📐 Fórmula del Día</h3>
-        <div className="bg-slate-900/50 rounded-lg p-6 text-center border border-slate-700/30">
-          <div className="overflow-x-auto">
-            <Math tex="\int x^n\,dx = \frac{x^{n+1}}{n+1} + C, \quad \text{donde } n \neq -1" display={true} className="text-blue-300" />
-          </div>
-          <p className="text-sm text-slate-400 mt-3">
-            Regla de la potencia — La base de toda integración
-          </p>
+        <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
+          <Math tex="\int x^n\,dx = \frac{x^{n+1}}{n+1} + C, \quad \text{donde } n \neq -1" display={true} />
         </div>
+        <p className="text-sm text-slate-400 mt-3 text-center">
+          Regla de la potencia — La base de toda integración
+        </p>
       </motion.div>
 
       {/* Developer Credit */}

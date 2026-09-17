@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calculator, CheckCircle, XCircle, Lightbulb, RotateCcw } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, RotateCcw, Calculator } from 'lucide-react';
 import Math from './Math';
 
 interface IntegralProblem {
@@ -139,7 +139,6 @@ export default function IntegralCalculator() {
     const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
     const userNorm = normalize(userAnswer);
     
-    // Flexible checking
     const correct = userNorm.includes('x^4/4') && problem.id === 1 ||
                     userNorm.includes('x^3') && userNorm.includes('x^2') && problem.id === 2 ||
                     userNorm.includes('e^(x^2)') && problem.id === 3 ||
@@ -169,11 +168,10 @@ export default function IntegralCalculator() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl p-6 border border-emerald-500/20">
+      <div className="bg-gradient-to-r from-[#e94560]/10 to-red-600/10 rounded-xl p-6 border border-[#e94560]/20">
         <h2 className="text-2xl font-bold text-white mb-2">🧮 Calculadora de Integrales</h2>
         <p className="text-slate-300">
-          Resuelve integrales paso a paso con retroalimentación inmediata. 
-          Escribe tu respuesta y verifica si es correcta.
+          Resuelve integrales paso a paso con retroalimentación inmediata.
         </p>
       </div>
 
@@ -185,8 +183,8 @@ export default function IntegralCalculator() {
             onClick={() => { setSelectedProblem(i); reset(); }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               selectedProblem === i
-                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
-                : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
+                ? 'bg-[#e94560] text-white shadow-lg'
+                : 'bg-[#0f3460] text-slate-400 hover:text-white border border-[#0f3460]'
             }`}
           >
             #{p.id}
@@ -201,7 +199,7 @@ export default function IntegralCalculator() {
           key={selectedProblem}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50"
+          className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50"
         >
           <div className="flex items-center justify-between mb-4">
             <span className={`px-2 py-1 rounded text-xs font-medium ${
@@ -214,15 +212,13 @@ export default function IntegralCalculator() {
             <span className="text-xs text-slate-500">Método: {problem.method}</span>
           </div>
 
-          <div className="bg-slate-900/50 rounded-lg p-6 text-center mb-6 border border-slate-700/30">
-            <p className="text-sm text-slate-400 mb-2">Resolver:</p>
-            <div className="overflow-x-auto">
-              <Math tex={problem.expression} display={true} />
-            </div>
+          <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
+            <h4 style={{ color: '#93c5fd' }}>RESOLVER:</h4>
+            <Math tex={problem.expression} display={true} />
           </div>
 
           {/* Answer Input */}
-          <div className="space-y-3">
+          <div className="space-y-3 mt-4">
             <label className="text-sm text-slate-400">Tu respuesta:</label>
             <input
               type="text"
@@ -230,19 +226,19 @@ export default function IntegralCalculator() {
               onChange={(e) => setUserAnswer(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && checkAnswer()}
               placeholder="Ej: x^4/4 + C"
-              className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              className="w-full bg-[#0f3460] border border-[#1a4080] rounded-lg px-4 py-3 text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-[#e94560] focus:ring-1 focus:ring-[#e94560]"
             />
             
             <div className="flex gap-2">
               <button
                 onClick={checkAnswer}
-                className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium py-2.5 rounded-lg hover:shadow-lg hover:shadow-emerald-500/25 transition-all"
+                className="flex-1 bg-[#e94560] text-white font-medium py-2.5 rounded-lg hover:bg-[#d63851] transition-all"
               >
                 Verificar
               </button>
               <button
                 onClick={reset}
-                className="px-4 py-2.5 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 transition-colors"
+                className="px-4 py-2.5 bg-[#0f3460] text-slate-300 rounded-lg hover:bg-[#1a4080] transition-colors"
               >
                 <RotateCcw size={16} />
               </button>
@@ -254,28 +250,20 @@ export default function IntegralCalculator() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`mt-4 p-4 rounded-lg border ${
-                isCorrect
-                  ? 'bg-emerald-900/20 border-emerald-500/30'
-                  : 'bg-amber-900/20 border-amber-500/30'
-              }`}
+              className={`mt-4 step-card ${isCorrect ? 'highlight' : 'error'}`}
             >
               <div className="flex items-center gap-2 mb-2">
                 {isCorrect ? (
                   <CheckCircle size={18} className="text-emerald-400" />
                 ) : (
-                  <XCircle size={18} className="text-amber-400" />
+                  <XCircle size={18} className="text-red-400" />
                 )}
-                <span className={`font-medium ${isCorrect ? 'text-emerald-400' : 'text-amber-400'}`}>
+                <span className={`font-medium ${isCorrect ? 'text-emerald-400' : 'text-red-400'}`}>
                   {isCorrect ? '¡Correcto!' : 'Revisa tu respuesta'}
                 </span>
               </div>
-              <p className="text-sm text-slate-300">
-                Respuesta correcta:
-              </p>
-              <div className="mt-1 overflow-x-auto">
-                <Math tex={problem.answer} className="text-white" />
-              </div>
+              <p className="text-sm text-slate-400 mb-2">Respuesta correcta:</p>
+              <Math tex={problem.answer} display={true} />
             </motion.div>
           )}
         </motion.div>
@@ -283,7 +271,7 @@ export default function IntegralCalculator() {
         {/* Help Panel */}
         <div className="space-y-4">
           {/* Hint */}
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+          <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
             <button
               onClick={() => setShowHint(!showHint)}
               className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors"
@@ -295,7 +283,7 @@ export default function IntegralCalculator() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mt-3 text-sm text-slate-300 bg-amber-900/10 rounded-lg p-3 border border-amber-500/20"
+                className="mt-3 step-card"
               >
                 💡 <Math tex={problem.hint} />
               </motion.div>
@@ -303,7 +291,7 @@ export default function IntegralCalculator() {
           </div>
 
           {/* Steps */}
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+          <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
             <button
               onClick={() => setShowSteps(!showSteps)}
               className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
@@ -318,12 +306,14 @@ export default function IntegralCalculator() {
                 className="mt-4 space-y-2"
               >
                 {problem.steps.map((step, i) => (
-                  <div key={i} className="flex items-start gap-3 bg-slate-900/30 rounded-lg p-3">
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-bold text-blue-400">{i + 1}</span>
-                    </div>
-                    <div className="text-sm text-slate-300 overflow-x-auto">
-                      <Math tex={step} />
+                  <div key={i} className="step-card" style={{ marginBottom: '8px' }}>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(59, 130, 246, 0.2)' }}>
+                        <span className="text-xs font-bold text-blue-400">{i + 1}</span>
+                      </div>
+                      <div className="text-sm overflow-x-auto">
+                        <Math tex={step} />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -334,12 +324,11 @@ export default function IntegralCalculator() {
           {/* Next Problem */}
           <button
             onClick={nextProblem}
-            className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 text-left hover:border-blue-500/30 transition-all group"
+            className="w-full bg-[#0f3460]/50 border border-[#0f3460] rounded-xl p-4 text-left hover:border-[#e94560]/50 transition-all group"
           >
-            <p className="text-sm text-slate-400">Siguiente problema</p>
+            <p className="text-sm text-slate-400">Siguiente problema →</p>
             <div className="mt-1 overflow-x-auto">
-              <Math tex={problems[(selectedProblem + 1) % problems.length].expression} className="text-white group-hover:text-blue-300 transition-colors" />
-              <span className="text-blue-400 ml-2">→</span>
+              <Math tex={problems[(selectedProblem + 1) % problems.length].expression} />
             </div>
           </button>
         </div>

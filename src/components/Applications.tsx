@@ -179,7 +179,7 @@ export default function Applications() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600/10 to-violet-600/10 rounded-xl p-6 border border-indigo-500/20">
+      <div className="bg-gradient-to-r from-[#e94560]/10 to-red-600/10 rounded-xl p-6 border border-[#e94560]/20">
         <h2 className="text-2xl font-bold text-white mb-2">⚡ Aplicaciones de la Integración</h2>
         <p className="text-slate-300">
           La integral definida tiene aplicaciones poderosas en geometría, física, economía e ingeniería.
@@ -197,7 +197,7 @@ export default function Applications() {
               className={`p-3 rounded-xl text-center transition-all border ${
                 selectedApp === app.id
                   ? `bg-gradient-to-br ${app.color} border-transparent shadow-lg`
-                  : 'bg-slate-800/50 border-slate-700/50 hover:border-slate-600'
+                  : 'bg-[#0f3460]/50 border-[#0f3460] hover:border-slate-600'
               }`}
             >
               <AppIcon size={20} className={`mx-auto mb-1 ${selectedApp === app.id ? 'text-white' : 'text-slate-400'}`} />
@@ -218,7 +218,7 @@ export default function Applications() {
       >
         {/* Info */}
         <div className="space-y-4">
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+          <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
             <div className="flex items-center gap-3 mb-4">
               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${currentApp.color} flex items-center justify-center`}>
                 <Icon size={20} className="text-white" />
@@ -227,26 +227,22 @@ export default function Applications() {
             </div>
             <p className="text-slate-300 mb-4">{currentApp.description}</p>
             
-            <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30 mb-4">
-              <p className="text-sm text-slate-400 mb-1">Fórmula General</p>
-              <div className="overflow-x-auto py-2">
-                <MathTex tex={currentApp.formula} display={true} />
-              </div>
+            <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
+              <h4 style={{ color: '#93c5fd' }}>📐 FÓRMULA GENERAL</h4>
+              <MathTex tex={currentApp.formula} display={true} />
             </div>
           </div>
 
           {/* Example */}
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+          <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
             <h4 className="text-lg font-semibold text-white mb-3">📝 Ejemplo Resuelto</h4>
-            <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-500/20 mb-4">
-              <div className="overflow-x-auto">
-                <MathTex tex={currentApp.example.problem} className="text-blue-300" />
-              </div>
+            <div className="step-card">
+              <MathTex tex={currentApp.example.problem} />
             </div>
             
             <button
               onClick={() => setShowSolution(!showSolution)}
-              className="w-full bg-slate-700/50 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg transition-colors mb-3"
+              className="w-full bg-[#0f3460] hover:bg-[#1a4080] text-white font-medium py-2.5 rounded-lg transition-colors mb-3 mt-3"
             >
               {showSolution ? 'Ocultar' : 'Ver'} Solución Paso a Paso
             </button>
@@ -258,20 +254,20 @@ export default function Applications() {
                 className="space-y-2"
               >
                 {currentApp.example.solution.map((step, i) => (
-                  <div key={i} className="flex items-start gap-2 bg-slate-900/30 rounded-lg p-3">
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-500/20 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
-                      {i + 1}
-                    </span>
-                    <div className="text-sm text-slate-300 overflow-x-auto">
-                      <MathTex tex={step} />
+                  <div key={i} className="step-card" style={{ marginBottom: '8px' }}>
+                    <div className="flex items-start gap-2">
+                      <span className="text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34, 197, 94, 0.2)', color: '#22c55e' }}>
+                        {i + 1}
+                      </span>
+                      <div className="text-sm overflow-x-auto">
+                        <MathTex tex={step} />
+                      </div>
                     </div>
                   </div>
                 ))}
-                <div className="bg-emerald-900/20 rounded-lg p-3 border border-emerald-500/20 mt-2">
-                  <p className="text-sm text-emerald-400 font-semibold">✅ Resultado:</p>
-                  <div className="mt-1 overflow-x-auto">
-                    <MathTex tex={currentApp.example.result} className="text-emerald-200" />
-                  </div>
+                <div className="step-card highlight">
+                  <h4 style={{ color: '#fbbf24' }}>✅ RESULTADO:</h4>
+                  <MathTex tex={currentApp.example.result} display={true} />
                 </div>
               </motion.div>
             )}
@@ -279,7 +275,7 @@ export default function Applications() {
         </div>
 
         {/* Graph */}
-        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+        <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
           <h4 className="text-lg font-semibold text-white mb-4">📈 Visualización</h4>
           <p className="text-sm text-slate-400 mb-4">{currentApp.graphLabel}</p>
           <ResponsiveContainer width="100%" height={350}>

@@ -50,25 +50,29 @@ body {
   background: #64748b;
 }
 
-/* KaTeX Styles */
-.math-rendered {
-  line-height: 1.4;
+/* KaTeX Styles - Estilo del Visualizador de Riemann */
+.math-block {
+  background: rgba(15, 52, 96, 0.5);
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 8px 0;
+  overflow-x: auto;
+}
+
+.math-block .katex {
+  font-size: 1.3em !important;
+  color: #e2e8f0 !important;
+}
+
+.math-inline {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .math-inline .katex {
   font-size: 1.05em !important;
-  color: inherit;
-}
-
-.math-display .katex {
-  font-size: 1.4em !important;
-  color: inherit;
-}
-
-.math-display {
-  display: block;
-  text-align: center;
-  padding: 0.5rem 0;
+  color: inherit !important;
 }
 
 /* Override KaTeX colors to inherit from parent */
@@ -90,6 +94,41 @@ body {
 .overflow-x-auto .katex-display {
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* Step cards - Estilo del Visualizador de Riemann */
+.step-card {
+  padding: 12px;
+  background: rgba(15, 52, 96, 0.3);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.step-card h4 {
+  font-size: 11px;
+  font-weight: 700;
+  color: #93c5fd;
+  margin-bottom: 8px;
+}
+
+.step-card p,
+.step-card div {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+}
+
+.step-card.highlight {
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.step-card.error {
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.step-card.formula {
+  background: rgba(233, 69, 96, 0.1);
+  border: 1px solid rgba(233, 69, 96, 0.3);
 }
 
 /* Animations */

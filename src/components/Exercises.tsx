@@ -146,7 +146,7 @@ export default function Exercises() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-600/10 to-orange-600/10 rounded-xl p-6 border border-amber-500/20">
+      <div className="bg-gradient-to-r from-[#e94560]/10 to-red-600/10 rounded-xl p-6 border border-[#e94560]/20">
         <h2 className="text-2xl font-bold text-white mb-2">🏆 Banco de Ejercicios</h2>
         <p className="text-slate-300">
           Pon a prueba tu conocimiento con ejercicios de opción múltiple. ¡Gana puntos!
@@ -155,17 +155,17 @@ export default function Exercises() {
 
       {/* Score Board */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 text-center">
+        <div className="bg-[#16213e]/70 rounded-xl p-4 border border-[#0f3460]/50 text-center">
           <Trophy size={24} className="text-amber-400 mx-auto mb-1" />
           <p className="text-2xl font-bold text-white">{score}</p>
           <p className="text-xs text-slate-400">Correctas</p>
         </div>
-        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 text-center">
+        <div className="bg-[#16213e]/70 rounded-xl p-4 border border-[#0f3460]/50 text-center">
           <Star size={24} className="text-blue-400 mx-auto mb-1" />
           <p className="text-2xl font-bold text-white">{answered}</p>
           <p className="text-xs text-slate-400">Respondidas</p>
         </div>
-        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 text-center">
+        <div className="bg-[#16213e]/70 rounded-xl p-4 border border-[#0f3460]/50 text-center">
           <div className="text-2xl font-bold text-white mb-1">
             {answered > 0 ? Math.round((score / answered) * 100) : 0}%
           </div>
@@ -181,8 +181,8 @@ export default function Exercises() {
             onClick={() => { setCategory(cat); setCurrentExercise(0); setSelectedOption(null); setShowExplanation(false); }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               category === cat
-                ? 'bg-amber-500 text-white'
-                : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'
+                ? 'bg-[#e94560] text-white'
+                : 'bg-[#0f3460] text-slate-400 border border-[#0f3460] hover:text-white'
             }`}
           >
             {cat}
@@ -197,29 +197,29 @@ export default function Exercises() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50"
+          className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50"
         >
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm text-slate-500">Ejercicio {currentExercise + 1} de {filteredExercises.length}</span>
-            <span className="px-2 py-1 rounded text-xs bg-slate-700 text-slate-300">{exercise.category}</span>
+            <span className="px-2 py-1 rounded text-xs bg-[#0f3460] text-slate-300">{exercise.category}</span>
           </div>
 
           <h3 className="text-lg font-semibold text-white mb-2">{exercise.question}</h3>
-          <div className="mb-6 overflow-x-auto">
-            <MathTex tex={exercise.expression} display={true} className="text-blue-300" />
+          <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
+            <MathTex tex={exercise.expression} display={true} />
           </div>
 
           {/* Options */}
-          <div className="space-y-3">
+          <div className="space-y-3 mt-4">
             {exercise.options.map((option, i) => {
-              let btnClass = 'bg-slate-900/50 border-slate-700/50 hover:border-blue-500/50 text-slate-300';
+              let btnClass = 'bg-[#0f0f23]/50 border-[#0f3460]/50 hover:border-[#e94560]/50 text-slate-300';
               if (selectedOption !== null) {
                 if (i === exercise.correctIndex) {
                   btnClass = 'bg-emerald-900/30 border-emerald-500/50 text-emerald-300';
                 } else if (i === selectedOption && i !== exercise.correctIndex) {
                   btnClass = 'bg-red-900/30 border-red-500/50 text-red-300';
                 } else {
-                  btnClass = 'bg-slate-900/30 border-slate-700/30 text-slate-500';
+                  btnClass = 'bg-[#0f0f23]/30 border-[#0f3460]/30 text-slate-500';
                 }
               }
 
@@ -230,7 +230,7 @@ export default function Exercises() {
                   disabled={selectedOption !== null}
                   className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left ${btnClass}`}
                 >
-                  <span className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  <span className="w-8 h-8 rounded-lg bg-[#0f3460] flex items-center justify-center text-sm font-bold flex-shrink-0">
                     {String.fromCharCode(65 + i)}
                   </span>
                   <div className="overflow-x-auto flex-1">
@@ -252,10 +252,10 @@ export default function Exercises() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 bg-blue-900/20 rounded-lg p-4 border border-blue-500/20"
+              className="mt-4 step-card"
             >
-              <p className="text-sm font-semibold text-blue-400 mb-1">💡 Explicación:</p>
-              <div className="text-sm text-slate-300 overflow-x-auto">
+              <h4 style={{ color: '#93c5fd' }}>💡 EXPLICACIÓN:</h4>
+              <div className="text-sm overflow-x-auto">
                 <MathTex tex={exercise.explanation} />
               </div>
             </motion.div>
@@ -265,13 +265,13 @@ export default function Exercises() {
           <div className="flex gap-3 mt-6">
             <button
               onClick={nextExercise}
-              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium py-3 rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all"
+              className="flex-1 flex items-center justify-center gap-2 bg-[#e94560] text-white font-medium py-3 rounded-xl hover:bg-[#d63851] transition-all"
             >
               Siguiente <ArrowRight size={16} />
             </button>
             <button
               onClick={resetAll}
-              className="px-4 py-3 bg-slate-700 text-slate-300 rounded-xl hover:bg-slate-600 transition-colors"
+              className="px-4 py-3 bg-[#0f3460] text-slate-300 rounded-xl hover:bg-[#1a4080] transition-colors"
             >
               <RotateCcw size={16} />
             </button>

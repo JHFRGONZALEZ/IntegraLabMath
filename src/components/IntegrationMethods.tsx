@@ -76,17 +76,6 @@ const methods: Method[] = [
           '\\text{Factorizando: } e^x(x - 1) + C'
         ],
         result: 'e^x(x - 1) + C'
-      },
-      {
-        problem: '\\int x^2 \\cdot \\ln(x)\\,dx',
-        steps: [
-          'u = \\ln(x) \\text{ (logarítmica)},\\; dv = x^2\\,dx',
-          'du = \\frac{1}{x}\\,dx,\\; v = \\frac{x^3}{3}',
-          '\\text{Aplicando: } \\frac{x^3}{3}\\ln(x) - \\int \\frac{x^3}{3} \\cdot \\frac{1}{x}\\,dx',
-          '\\text{Simplificando: } \\frac{x^3}{3}\\ln(x) - \\frac{1}{3}\\int x^2\\,dx',
-          '\\text{Resolviendo: } \\frac{x^3}{3}\\ln(x) - \\frac{x^3}{9} + C'
-        ],
-        result: '\\frac{x^3}{3}\\ln(x) - \\frac{x^3}{9} + C'
       }
     ],
     color: 'from-purple-500 to-pink-500'
@@ -215,7 +204,7 @@ export default function IntegrationMethods() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-xl p-6 border border-purple-500/20">
+      <div className="bg-gradient-to-r from-[#e94560]/10 to-red-600/10 rounded-xl p-6 border border-[#e94560]/20">
         <h2 className="text-2xl font-bold text-white mb-2">🎓 Métodos de Integración</h2>
         <p className="text-slate-300">
           Cada método tiene su momento de aplicación. Aprende a identificar cuándo usar cada técnica.
@@ -231,7 +220,7 @@ export default function IntegrationMethods() {
             className={`p-3 rounded-xl text-xs font-medium transition-all duration-200 border ${
               selectedMethod === method.id
                 ? 'bg-gradient-to-r ' + method.color + ' text-white border-transparent shadow-lg'
-                : 'bg-slate-800/50 text-slate-400 border-slate-700/50 hover:border-slate-600 hover:text-white'
+                : 'bg-[#0f3460]/50 text-slate-400 border-[#0f3460] hover:border-slate-600 hover:text-white'
             }`}
           >
             {method.name.split(' ')[0]}
@@ -247,7 +236,7 @@ export default function IntegrationMethods() {
         className="space-y-4"
       >
         {/* Method Info */}
-        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+        <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
           <div className="flex items-center gap-3 mb-4">
             <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${currentMethod.color} flex items-center justify-center`}>
               <span className="text-white font-bold text-lg">∫</span>
@@ -259,30 +248,30 @@ export default function IntegrationMethods() {
           </div>
 
           {/* When to use */}
-          <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-500/20 mb-4">
-            <p className="text-sm font-semibold text-blue-400 mb-1">¿Cuándo usar este método?</p>
-            <p className="text-slate-300">{currentMethod.when}</p>
+          <div className="step-card">
+            <h4 style={{ color: '#93c5fd' }}>¿CUÁNDO USAR ESTE MÉTODO?</h4>
+            <p>{currentMethod.when}</p>
           </div>
 
           {/* Formula */}
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30 mb-4">
-            <p className="text-sm font-semibold text-purple-400 mb-2">Fórmula General</p>
-            <div className="overflow-x-auto py-2">
-              <Math tex={currentMethod.formula} display={true} />
-            </div>
+          <div className="step-card" style={{ background: 'rgba(15, 52, 96, 0.5)' }}>
+            <h4 style={{ color: '#93c5fd' }}>📐 FÓRMULA GENERAL</h4>
+            <Math tex={currentMethod.formula} display={true} />
           </div>
 
           {/* Steps */}
           <div>
-            <p className="text-sm font-semibold text-emerald-400 mb-3">Pasos del Método</p>
+            <h4 className="text-xs font-bold mb-3" style={{ color: '#22c55e' }}>PASOS DEL MÉTODO</h4>
             <div className="space-y-2">
               {currentMethod.steps.map((step, i) => (
-                <div key={i} className="flex items-start gap-3 bg-slate-900/30 rounded-lg p-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-emerald-400">{i + 1}</span>
-                  </div>
-                  <div className="text-sm text-slate-300 overflow-x-auto">
-                    <Math tex={step} />
+                <div key={i} className="step-card" style={{ marginBottom: '8px' }}>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34, 197, 94, 0.2)' }}>
+                      <span className="text-xs font-bold" style={{ color: '#22c55e' }}>{i + 1}</span>
+                    </div>
+                    <div className="text-sm overflow-x-auto">
+                      <Math tex={step} />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -291,17 +280,17 @@ export default function IntegrationMethods() {
         </div>
 
         {/* Examples */}
-        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+        <div className="bg-[#16213e]/70 rounded-xl p-6 border border-[#0f3460]/50">
           <h4 className="text-lg font-semibold text-white mb-4">📝 Ejemplos Resueltos</h4>
           <div className="space-y-3">
             {currentMethod.examples.map((ex, i) => (
-              <div key={i} className="border border-slate-700/30 rounded-lg overflow-hidden">
+              <div key={i} className="border border-[#0f3460]/50 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setShowExample(showExample === i ? null : i)}
-                  className="w-full flex items-center justify-between p-4 bg-slate-900/30 hover:bg-slate-900/50 transition-colors"
+                  className="w-full flex items-center justify-between p-4 bg-[#0f0f23]/50 hover:bg-[#0f3460]/30 transition-colors"
                 >
                   <div className="overflow-x-auto">
-                    <Math tex={ex.problem} className="text-blue-300" />
+                    <Math tex={ex.problem} />
                   </div>
                   <ChevronRight size={16} className={`text-slate-400 transition-transform flex-shrink-0 ml-2 ${showExample === i ? 'rotate-90' : ''}`} />
                 </button>
@@ -309,17 +298,17 @@ export default function IntegrationMethods() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="p-4 space-y-2 bg-slate-900/20"
+                    className="p-4 space-y-2 bg-[#0f0f23]/30"
                   >
                     {ex.steps.map((step, j) => (
                       <div key={j} className="flex items-center gap-2 text-sm">
-                        <ArrowRight size={12} className="text-emerald-400 flex-shrink-0" />
+                        <ArrowRight size={12} className="text-[#22c55e] flex-shrink-0" />
                         <div className="overflow-x-auto">
                           <Math tex={step} />
                         </div>
                       </div>
                     ))}
-                    <div className="mt-3 pt-3 border-t border-slate-700/30">
+                    <div className="mt-3 pt-3 border-t border-[#0f3460]/30">
                       <span className="text-sm text-slate-400">Resultado: </span>
                       <Math tex={ex.result} className="text-emerald-300 font-semibold" />
                     </div>
