@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, Trophy, Star, ArrowRight, RotateCcw } from 'lucide-react';
+import MathTex from './Math';
 
 interface Exercise {
   id: number;
@@ -16,91 +17,91 @@ const exercises: Exercise[] = [
   {
     id: 1,
     question: '¿Cuál es la integral de x⁴?',
-    expression: '∫ x⁴ dx = ?',
-    options: ['x⁵/5 + C', '4x³ + C', 'x⁵ + C', '5x⁵ + C'],
+    expression: '\\int x^4\\,dx = \\;?',
+    options: ['\\frac{x^5}{5} + C', '4x^3 + C', 'x^5 + C', '5x^5 + C'],
     correctIndex: 0,
-    explanation: 'Regla de la potencia: ∫xⁿdx = xⁿ⁺¹/(n+1) + C. Con n=4: x⁵/5 + C',
+    explanation: 'Regla de la potencia: \\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C. Con n=4: \\frac{x^5}{5} + C',
     category: 'Básicas'
   },
   {
     id: 2,
-    question: '¿Cuál es ∫ cos(x) dx?',
-    expression: '∫ cos(x) dx = ?',
-    options: ['-sen(x) + C', 'sen(x) + C', 'cos(x) + C', '-cos(x) + C'],
+    question: '¿Cuál es la integral de cos(x)?',
+    expression: '\\int \\cos(x)\\,dx = \\;?',
+    options: ['-\\sin(x) + C', '\\sin(x) + C', '\\cos(x) + C', '-\\cos(x) + C'],
     correctIndex: 1,
-    explanation: 'La antiderivada de cos(x) es sen(x). Recuerda: d/dx[sen(x)] = cos(x)',
+    explanation: 'La antiderivada de \\cos(x) es \\sin(x). Recuerda: \\frac{d}{dx}[\\sin(x)] = \\cos(x)',
     category: 'Trigonométricas'
   },
   {
     id: 3,
-    question: '¿Cuál es ∫ e^(2x) dx?',
-    expression: '∫ e^(2x) dx = ?',
-    options: ['e^(2x) + C', '2e^(2x) + C', 'e^(2x)/2 + C', 'xe^(2x) + C'],
+    question: '¿Cuál es la integral de e^(2x)?',
+    expression: '\\int e^{2x}\\,dx = \\;?',
+    options: ['e^{2x} + C', '2e^{2x} + C', '\\frac{e^{2x}}{2} + C', 'xe^{2x} + C'],
     correctIndex: 2,
-    explanation: 'Usando sustitución u=2x: ∫e^u·(du/2) = e^u/2 = e^(2x)/2 + C',
+    explanation: 'Usando sustitución u=2x: \\int e^u \\cdot \\frac{du}{2} = \\frac{e^u}{2} = \\frac{e^{2x}}{2} + C',
     category: 'Exponenciales'
   },
   {
     id: 4,
-    question: '¿Cuál es ∫ 1/x dx?',
-    expression: '∫ 1/x dx = ?',
-    options: ['x⁻¹ + C', '-1/x² + C', 'ln|x| + C', 'log(x) + C'],
+    question: '¿Cuál es la integral de 1/x?',
+    expression: '\\int \\frac{1}{x}\\,dx = \\;?',
+    options: ['x^{-1} + C', '-\\frac{1}{x^2} + C', '\\ln|x| + C', '\\log(x) + C'],
     correctIndex: 2,
-    explanation: 'La integral de 1/x es ln|x| + C. Es un caso especial porque la regla de potencia no aplica con n=-1.',
+    explanation: 'La integral de \\frac{1}{x} es \\ln|x| + C. Es un caso especial porque la regla de potencia no aplica con n=-1.',
     category: 'Básicas'
   },
   {
     id: 5,
-    question: '¿Cuál es ∫ sen(x) dx?',
-    expression: '∫ sen(x) dx = ?',
-    options: ['cos(x) + C', '-cos(x) + C', 'sen(x) + C', '-sen(x) + C'],
+    question: '¿Cuál es la integral de sen(x)?',
+    expression: '\\int \\sin(x)\\,dx = \\;?',
+    options: ['\\cos(x) + C', '-\\cos(x) + C', '\\sin(x) + C', '-\\sin(x) + C'],
     correctIndex: 1,
-    explanation: 'La antiderivada de sen(x) es -cos(x) + C. Verifica: d/dx[-cos(x)] = sen(x) ✓',
+    explanation: 'La antiderivada de \\sin(x) es -\\cos(x) + C. Verifica: \\frac{d}{dx}[-\\cos(x)] = \\sin(x) ✓',
     category: 'Trigonométricas'
   },
   {
     id: 6,
-    question: '¿Qué método usarías para ∫ x·eˣ dx?',
-    expression: '∫ x·eˣ dx',
+    question: '¿Qué método usarías para esta integral?',
+    expression: '\\int x \\cdot e^x\\,dx',
     options: ['Sustitución', 'Integración por Partes', 'Fracciones Parciales', 'Sustitución Trigonométrica'],
     correctIndex: 1,
-    explanation: 'Es un producto de funciones de diferente naturaleza (polinomio × exponencial). Usamos partes con u=x, dv=eˣdx.',
+    explanation: 'Es un producto de funciones de diferente naturaleza (polinomio × exponencial). Usamos partes con u=x,\\; dv=e^x\\,dx.',
     category: 'Métodos'
   },
   {
     id: 7,
-    question: '¿Cuál es ∫ sec²(x) dx?',
-    expression: '∫ sec²(x) dx = ?',
-    options: ['sec(x)·tan(x) + C', 'tan(x) + C', '-csc(x) + C', 'sec(x) + C'],
+    question: '¿Cuál es la integral de sec²(x)?',
+    expression: '\\int \\sec^2(x)\\,dx = \\;?',
+    options: ['\\sec(x)\\tan(x) + C', '\\tan(x) + C', '-\\csc(x) + C', '\\sec(x) + C'],
     correctIndex: 1,
-    explanation: 'La integral de sec²(x) es tan(x) + C. Es una integral directa que debes memorizar.',
+    explanation: 'La integral de \\sec^2(x) es \\tan(x) + C. Es una integral directa que debes memorizar.',
     category: 'Trigonométricas'
   },
   {
     id: 8,
-    question: '¿Cuál es ∫ 1/(1+x²) dx?',
-    expression: '∫ 1/(1+x²) dx = ?',
-    options: ['ln(1+x²) + C', 'arctan(x) + C', 'arcsen(x) + C', 'x/(1+x²) + C'],
+    question: '¿Cuál es la integral de 1/(1+x²)?',
+    expression: '\\int \\frac{1}{1+x^2}\\,dx = \\;?',
+    options: ['\\ln(1+x^2) + C', '\\arctan(x) + C', '\\arcsin(x) + C', '\\frac{x}{1+x^2} + C'],
     correctIndex: 1,
-    explanation: 'Es la forma estándar de la integral que produce arcotangente: ∫1/(a²+x²)dx = (1/a)arctan(x/a)+C con a=1.',
+    explanation: 'Es la forma estándar: \\int \\frac{1}{a^2+x^2}\\,dx = \\frac{1}{a}\\arctan\\left(\\frac{x}{a}\\right)+C \\text{ con } a=1.',
     category: 'Inversas'
   },
   {
     id: 9,
-    question: 'Si F\'(x) = f(x), entonces ∫ₐᵇ f(x)dx = ?',
-    expression: '∫ₐᵇ f(x)dx = ?',
+    question: 'Si F\'(x) = f(x), entonces la integral definida es:',
+    expression: '\\int_a^b f(x)\\,dx = \\;?',
     options: ['F(a) - F(b)', 'F(b) - F(a)', 'f(b) - f(a)', 'F(a) + F(b)'],
     correctIndex: 1,
-    explanation: 'Teorema Fundamental del Cálculo: ∫ₐᵇ f(x)dx = F(b) - F(a), donde F es antiderivada de f.',
+    explanation: 'Teorema Fundamental del Cálculo: \\int_a^b f(x)\\,dx = F(b) - F(a), donde F es antiderivada de f.',
     category: 'Teoremas'
   },
   {
     id: 10,
-    question: '¿Cuál es ∫ x/(x²+1) dx?',
-    expression: '∫ x/(x²+1) dx = ?',
-    options: ['arctan(x) + C', 'ln(x²+1)/2 + C', 'x²/(x²+1) + C', '1/(x²+1)² + C'],
+    question: '¿Cuál es la integral de x/(x²+1)?',
+    expression: '\\int \\frac{x}{x^2+1}\\,dx = \\;?',
+    options: ['\\arctan(x) + C', '\\frac{1}{2}\\ln(x^2+1) + C', '\\frac{x^2}{x^2+1} + C', '\\frac{1}{(x^2+1)^2} + C'],
     correctIndex: 1,
-    explanation: 'Sustitución u=x²+1, du=2xdx. Entonces ∫(1/2)(du/u) = (1/2)ln|u| = ln(x²+1)/2 + C',
+    explanation: 'Sustitución u=x^2+1,\\; du=2x\\,dx. Entonces \\int \\frac{1}{2}\\frac{du}{u} = \\frac{1}{2}\\ln|u| = \\frac{1}{2}\\ln(x^2+1) + C',
     category: 'Sustitución'
   }
 ];
@@ -204,7 +205,9 @@ export default function Exercises() {
           </div>
 
           <h3 className="text-lg font-semibold text-white mb-2">{exercise.question}</h3>
-          <p className="text-xl font-mono text-blue-300 mb-6">{exercise.expression}</p>
+          <div className="mb-6 overflow-x-auto">
+            <MathTex tex={exercise.expression} display={true} className="text-blue-300" />
+          </div>
 
           {/* Options */}
           <div className="space-y-3">
@@ -230,12 +233,14 @@ export default function Exercises() {
                   <span className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-sm font-bold flex-shrink-0">
                     {String.fromCharCode(65 + i)}
                   </span>
-                  <span className="font-mono">{option}</span>
+                  <div className="overflow-x-auto flex-1">
+                    <MathTex tex={option} />
+                  </div>
                   {selectedOption !== null && i === exercise.correctIndex && (
-                    <CheckCircle size={18} className="ml-auto text-emerald-400" />
+                    <CheckCircle size={18} className="ml-auto text-emerald-400 flex-shrink-0" />
                   )}
                   {selectedOption === i && i !== exercise.correctIndex && (
-                    <XCircle size={18} className="ml-auto text-red-400" />
+                    <XCircle size={18} className="ml-auto text-red-400 flex-shrink-0" />
                   )}
                 </button>
               );
@@ -250,7 +255,9 @@ export default function Exercises() {
               className="mt-4 bg-blue-900/20 rounded-lg p-4 border border-blue-500/20"
             >
               <p className="text-sm font-semibold text-blue-400 mb-1">💡 Explicación:</p>
-              <p className="text-sm text-slate-300">{exercise.explanation}</p>
+              <div className="text-sm text-slate-300 overflow-x-auto">
+                <MathTex tex={exercise.explanation} />
+              </div>
             </motion.div>
           )}
 

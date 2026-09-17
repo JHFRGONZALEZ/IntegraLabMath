@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Calculator, BarChart3, Award, GraduationCap, Zap, TrendingUp, Users, Clock } from 'lucide-react';
+import Math from './Math';
 
 type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications';
 
@@ -127,13 +128,29 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       >
         <h3 className="text-lg font-semibold text-white mb-4">📐 Fórmula del Día</h3>
         <div className="bg-slate-900/50 rounded-lg p-6 text-center border border-slate-700/30">
-          <p className="text-2xl md:text-3xl font-mono text-blue-300">
-            ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C, donde n ≠ -1
-          </p>
+          <div className="overflow-x-auto">
+            <Math tex="\int x^n\,dx = \frac{x^{n+1}}{n+1} + C, \quad \text{donde } n \neq -1" display={true} className="text-blue-300" />
+          </div>
           <p className="text-sm text-slate-400 mt-3">
             Regla de la potencia — La base de toda integración
           </p>
         </div>
+      </motion.div>
+
+      {/* Developer Credit */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7 }}
+        className="bg-gradient-to-r from-slate-800/50 to-slate-800/30 rounded-xl p-6 border border-slate-700/30 text-center"
+      >
+        <p className="text-sm text-slate-500 mb-1">Desarrollado por</p>
+        <p className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+          Jhon Fredy González
+        </p>
+        <p className="text-xs text-slate-500 mt-2">
+          IntegralLab Pro — Plataforma Educativa de Cálculo Integral — 2026
+        </p>
       </motion.div>
     </div>
   );

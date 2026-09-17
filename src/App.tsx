@@ -89,6 +89,12 @@ export default function App() {
               <p className="text-sm text-white font-medium">Material Didáctico</p>
               <p className="text-xs text-slate-500 mt-1">v2.0 — 2026</p>
             </div>
+            <div className="mt-3 text-center">
+              <p className="text-xs text-slate-500">Desarrollado por</p>
+              <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                Jhon Fredy González
+              </p>
+            </div>
           </div>
         </div>
       </aside>

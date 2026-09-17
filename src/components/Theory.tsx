@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, Lightbulb, AlertTriangle, CheckCircle } from 'lucide-react';
+import Math from './Math';
 
 interface Topic {
   id: string;
@@ -17,55 +18,80 @@ const topics: Topic[] = [
     id: 'integral-def',
     title: 'Definición de Integral Definida',
     definition: 'La integral definida de f(x) desde a hasta b es el límite de las sumas de Riemann cuando el número de subintervalos tiende a infinito.',
-    formula: '∫ₐᵇ f(x)dx = lim(n→∞) Σᵢ₌₁ⁿ f(xᵢ*)·Δx',
+    formula: '\\int_a^b f(x)\\,dx = \\lim_{n \\to \\infty} \\sum_{i=1}^{n} f(x_i^*) \\cdot \\Delta x',
     explanation: 'Geométricamente, la integral definida representa el área neta (área arriba del eje x menos área abajo) entre la curva f(x) y el eje x, desde x=a hasta x=b.',
-    example: '∫₀² x² dx = [x³/3]₀² = 8/3 - 0 = 8/3',
-    tips: ['La integral definida produce un número, no una función', 'Si f(x) ≥ 0 en [a,b], la integral es el área bajo la curva', 'Propiedad: ∫ₐᵇ f(x)dx = -∫ᵇₐ f(x)dx']
+    example: '\\int_0^2 x^2\\,dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3} - 0 = \\frac{8}{3}',
+    tips: [
+      'La integral definida produce un número, no una función',
+      'Si f(x) \\geq 0 en [a,b], la integral es el área bajo la curva',
+      'Propiedad: \\int_a^b f(x)\\,dx = -\\int_b^a f(x)\\,dx'
+    ]
   },
   {
     id: 'integral-indef',
     title: 'Integral Indefinida (Antiderivada)',
     definition: 'La integral indefinida de f(x) es la familia de todas las funciones F(x) tales que F\'(x) = f(x).',
-    formula: '∫ f(x)dx = F(x) + C, donde F\'(x) = f(x)',
+    formula: '\\int f(x)\\,dx = F(x) + C, \\quad \\text{donde } F\'(x) = f(x)',
     explanation: 'La constante C (constante de integración) es esencial porque la derivada de cualquier constante es cero. Sin ella, perderíamos infinitas soluciones.',
-    example: '∫ 3x² dx = x³ + C',
-    tips: ['Siempre incluye la constante C', 'Verifica derivando tu resultado', '∫kf(x)dx = k∫f(x)dx (linealidad)']
+    example: '\\int 3x^2\\,dx = x^3 + C',
+    tips: [
+      'Siempre incluye la constante C',
+      'Verifica derivando tu resultado',
+      '\\int k \\cdot f(x)\\,dx = k \\int f(x)\\,dx \\quad \\text{(linealidad)}'
+    ]
   },
   {
     id: 'ftc',
     title: 'Teorema Fundamental del Cálculo',
     definition: 'Si f es continua en [a,b] y F es cualquier antiderivada de f, entonces la integral definida se evalúa como la diferencia de F en los extremos.',
-    formula: '∫ₐᵇ f(x)dx = F(b) - F(a)',
+    formula: '\\int_a^b f(x)\\,dx = F(b) - F(a)',
     explanation: 'Este teorema conecta la derivación con la integración, mostrando que son operaciones inversas. Es el puente entre el cálculo diferencial e integral.',
-    example: '∫₁³ 2x dx = [x²]₁³ = 9 - 1 = 8',
-    tips: ['Es el teorema más importante del cálculo', 'Permite evaluar integrales sin usar límites', 'F(b) - F(a) se lee "F evaluada en b menos F evaluada en a"']
+    example: '\\int_1^3 2x\\,dx = \\left[x^2\\right]_1^3 = 9 - 1 = 8',
+    tips: [
+      'Es el teorema más importante del cálculo',
+      'Permite evaluar integrales sin usar límites',
+      'F(b) - F(a) se lee "F evaluada en b menos F evaluada en a"'
+    ]
   },
   {
     id: 'linearity',
     title: 'Propiedades de Linealidad',
     definition: 'La integral es un operador lineal: respeta la suma de funciones y la multiplicación por constantes.',
-    formula: '∫[af(x) + bg(x)]dx = a∫f(x)dx + b∫g(x)dx',
+    formula: '\\int \\left[a \\cdot f(x) + b \\cdot g(x)\\right]\\,dx = a\\int f(x)\\,dx + b\\int g(x)\\,dx',
     explanation: 'Esta propiedad permite descomponer integrales complejas en partes más simples que podemos resolver individualmente.',
-    example: '∫(3x² + 2x)dx = 3∫x²dx + 2∫xdx = x³ + x² + C',
-    tips: ['Separa la integral en términos individuales', 'Saca las constantes fuera de la integral', 'Útil para polinomios de cualquier grado']
+    example: '\\int (3x^2 + 2x)\\,dx = 3\\int x^2\\,dx + 2\\int x\\,dx = x^3 + x^2 + C',
+    tips: [
+      'Separa la integral en términos individuales',
+      'Saca las constantes fuera de la integral',
+      'Útil para polinomios de cualquier grado'
+    ]
   },
   {
     id: 'basic-formulas',
     title: 'Fórmulas Básicas de Integración',
     definition: 'Son las antiderivadas fundamentales que todo estudiante debe memorizar como punto de partida.',
-    formula: '∫xⁿdx = xⁿ⁺¹/(n+1)+C | ∫eˣdx = eˣ+C | ∫1/x dx = ln|x|+C',
-    explanation: 'Estas fórmulas son el "alfabeto" de la integración. Dominarlas es prerequisite para técnicas más avanzadas.',
-    example: '∫(x³ + eˣ + 1/x)dx = x⁴/4 + eˣ + ln|x| + C',
-    tips: ['∫x⁻¹dx = ln|x|+C (caso especial, n=-1)', '∫sen(x)dx = -cos(x)+C (ojo con el signo)', '∫cos(x)dx = sen(x)+C', '∫sec²(x)dx = tan(x)+C']
+    formula: '\\int x^n\\,dx = \\frac{x^{n+1}}{n+1}+C \\;|\\; \\int e^x\\,dx = e^x+C \\;|\\; \\int \\frac{1}{x}\\,dx = \\ln|x|+C',
+    explanation: 'Estas fórmulas son el "alfabeto" de la integración. Dominarlas es prerrequisito para técnicas más avanzadas.',
+    example: '\\int \\left(x^3 + e^x + \\frac{1}{x}\\right)\\,dx = \\frac{x^4}{4} + e^x + \\ln|x| + C',
+    tips: [
+      '\\int x^{-1}\\,dx = \\ln|x|+C \\quad \\text{(caso especial, } n=-1\\text{)}',
+      '\\int \\sin(x)\\,dx = -\\cos(x)+C \\quad \\text{(ojo con el signo)}',
+      '\\int \\cos(x)\\,dx = \\sin(x)+C',
+      '\\int \\sec^2(x)\\,dx = \\tan(x)+C'
+    ]
   },
   {
     id: 'definite-props',
     title: 'Propiedades de la Integral Definida',
     definition: 'Propiedades algebraicas y geométricas que cumplen las integrales definidas.',
-    formula: '∫ₐᵃ f(x)dx = 0 | ∫ₐᵇ f(x)dx + ∫ᵇᶜ f(x)dx = ∫ₐᶜ f(x)dx',
+    formula: '\\int_a^a f(x)\\,dx = 0 \\;|\\; \\int_a^b f(x)\\,dx + \\int_b^c f(x)\\,dx = \\int_a^c f(x)\\,dx',
     explanation: 'Estas propiedades permiten manipular integrales definidas de manera algebraica, descomponer intervalos y simplificar cálculos.',
-    example: '∫₋₁¹ x³ dx = 0 (función impar en intervalo simétrico)',
-    tips: ['Si f es par: ∫₋ₐᵃ f(x)dx = 2∫₀ᵃ f(x)dx', 'Si f es impar: ∫₋ₐᵃ f(x)dx = 0', 'Valor medio: ∫ₐᵇ f(x)dx = f(c)·(b-a) para algún c']
+    example: '\\int_{-1}^{1} x^3\\,dx = 0 \\quad \\text{(función impar en intervalo simétrico)}',
+    tips: [
+      'Si f es par: \\int_{-a}^{a} f(x)\\,dx = 2\\int_0^a f(x)\\,dx',
+      'Si f es impar: \\int_{-a}^{a} f(x)\\,dx = 0',
+      'Valor medio: \\int_a^b f(x)\\,dx = f(c) \\cdot (b-a) \\text{ para algún } c'
+    ]
   }
 ];
 
@@ -134,7 +160,9 @@ export default function Theory() {
                     <span className="text-lg">📐</span>
                     <span className="text-sm font-semibold text-blue-400 uppercase tracking-wide">Fórmula</span>
                   </div>
-                  <p className="text-xl font-mono text-blue-200 text-center py-2">{topic.formula}</p>
+                  <div className="py-2 overflow-x-auto">
+                    <Math tex={topic.formula} display={true} />
+                  </div>
                 </div>
 
                 {/* Explanation */}
@@ -152,7 +180,9 @@ export default function Theory() {
                     <span className="text-lg">✏️</span>
                     <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wide">Ejemplo</span>
                   </div>
-                  <p className="text-lg font-mono text-emerald-200">{topic.example}</p>
+                  <div className="overflow-x-auto">
+                    <Math tex={topic.example} display={true} className="text-emerald-200" />
+                  </div>
                 </div>
 
                 {/* Tips */}
@@ -165,7 +195,9 @@ export default function Theory() {
                     {topic.tips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
                         <span className="text-amber-400 mt-0.5">•</span>
-                        <span>{tip}</span>
+                        <span className="overflow-x-auto">
+                          <Math tex={tip} />
+                        </span>
                       </li>
                     ))}
                   </ul>

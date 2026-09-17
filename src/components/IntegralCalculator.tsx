@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calculator, CheckCircle, XCircle, Lightbulb, RotateCcw } from 'lucide-react';
+import Math from './Math';
 
 interface IntegralProblem {
   id: number;
@@ -15,74 +16,111 @@ interface IntegralProblem {
 const problems: IntegralProblem[] = [
   {
     id: 1,
-    expression: '∫ x³ dx',
-    answer: 'x^4/4 + C',
-    hint: 'Usa la regla de la potencia: ∫xⁿdx = xⁿ⁺¹/(n+1) + C',
+    expression: '\\int x^3\\,dx',
+    answer: '\\frac{x^4}{4} + C',
+    hint: 'Usa la regla de la potencia: \\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C',
     method: 'Regla de la Potencia',
-    steps: ['Aplicar regla de la potencia con n=3', 'x^(3+1)/(3+1) + C', 'x⁴/4 + C'],
+    steps: [
+      '\\text{Aplicar regla de la potencia con } n=3',
+      '\\frac{x^{3+1}}{3+1} + C',
+      '\\frac{x^4}{4} + C'
+    ],
     difficulty: 'Básico'
   },
   {
     id: 2,
-    expression: '∫ (3x² + 2x - 5) dx',
+    expression: '\\int (3x^2 + 2x - 5)\\,dx',
     answer: 'x^3 + x^2 - 5x + C',
     hint: 'Integra término por término usando linealidad',
     method: 'Linealidad',
-    steps: ['Separar: 3∫x²dx + 2∫xdx - 5∫dx', '3(x³/3) + 2(x²/2) - 5x + C', 'x³ + x² - 5x + C'],
+    steps: [
+      '\\text{Separar: } 3\\int x^2\\,dx + 2\\int x\\,dx - 5\\int dx',
+      '3 \\cdot \\frac{x^3}{3} + 2 \\cdot \\frac{x^2}{2} - 5x + C',
+      'x^3 + x^2 - 5x + C'
+    ],
     difficulty: 'Básico'
   },
   {
     id: 3,
-    expression: '∫ 2x·e^(x²) dx',
-    answer: 'e^(x^2) + C',
-    hint: 'Identifica u = x², nota que du = 2x dx está presente',
+    expression: '\\int 2x \\cdot e^{x^2}\\,dx',
+    answer: 'e^{x^2} + C',
+    hint: 'Identifica u = x^2, nota que du = 2x\\,dx está presente',
     method: 'Sustitución',
-    steps: ['u = x², du = 2x dx', 'Sustituir: ∫e^u du', 'Integrar: e^u + C', 'Regresar: e^(x²) + C'],
+    steps: [
+      'u = x^2,\\; du = 2x\\,dx',
+      '\\text{Sustituir: } \\int e^u\\,du',
+      '\\text{Integrar: } e^u + C',
+      '\\text{Regresar: } e^{x^2} + C'
+    ],
     difficulty: 'Intermedio'
   },
   {
     id: 4,
-    expression: '∫ x·cos(x) dx',
-    answer: 'x·sin(x) + cos(x) + C',
-    hint: 'Usa integración por partes: u=x, dv=cos(x)dx',
+    expression: '\\int x \\cdot \\cos(x)\\,dx',
+    answer: 'x\\sin(x) + \\cos(x) + C',
+    hint: 'Usa integración por partes: u=x,\\; dv=\\cos(x)\\,dx',
     method: 'Partes',
-    steps: ['u = x → du = dx', 'dv = cos(x)dx → v = sen(x)', 'uv - ∫v du = x·sen(x) - ∫sen(x)dx', 'x·sen(x) + cos(x) + C'],
+    steps: [
+      'u = x \\to du = dx',
+      'dv = \\cos(x)\\,dx \\to v = \\sin(x)',
+      'uv - \\int v\\,du = x\\sin(x) - \\int \\sin(x)\\,dx',
+      'x\\sin(x) + \\cos(x) + C'
+    ],
     difficulty: 'Intermedio'
   },
   {
     id: 5,
-    expression: '∫ 1/(x² + 4) dx',
-    answer: '(1/2)·arctan(x/2) + C',
-    hint: 'Recuerda: ∫1/(x²+a²)dx = (1/a)arctan(x/a) + C',
+    expression: '\\int \\frac{1}{x^2 + 4}\\,dx',
+    answer: '\\frac{1}{2}\\arctan\\left(\\frac{x}{2}\\right) + C',
+    hint: 'Recuerda: \\int \\frac{1}{x^2+a^2}\\,dx = \\frac{1}{a}\\arctan\\left(\\frac{x}{a}\\right) + C',
     method: 'Fórmula Directa',
-    steps: ['Identificar forma: 1/(x²+a²) con a=2', 'Aplicar fórmula: (1/a)arctan(x/a) + C', '(1/2)arctan(x/2) + C'],
+    steps: [
+      '\\text{Identificar forma: } \\frac{1}{x^2+a^2} \\text{ con } a=2',
+      '\\text{Aplicar fórmula: } \\frac{1}{a}\\arctan\\left(\\frac{x}{a}\\right) + C',
+      '\\frac{1}{2}\\arctan\\left(\\frac{x}{2}\\right) + C'
+    ],
     difficulty: 'Intermedio'
   },
   {
     id: 6,
-    expression: '∫ sen²(x) dx',
-    answer: 'x/2 - sen(2x)/4 + C',
-    hint: 'Usa la identidad: sen²(x) = (1-cos(2x))/2',
+    expression: '\\int \\sin^2(x)\\,dx',
+    answer: '\\frac{x}{2} - \\frac{\\sin(2x)}{4} + C',
+    hint: 'Usa la identidad: \\sin^2(x) = \\frac{1-\\cos(2x)}{2}',
     method: 'Identidad Trigonométrica',
-    steps: ['Identidad: sen²(x) = (1-cos(2x))/2', '∫(1/2 - cos(2x)/2)dx', 'x/2 - sen(2x)/4 + C'],
+    steps: [
+      '\\text{Identidad: } \\sin^2(x) = \\frac{1-\\cos(2x)}{2}',
+      '\\int \\left(\\frac{1}{2} - \\frac{\\cos(2x)}{2}\\right)\\,dx',
+      '\\frac{x}{2} - \\frac{\\sin(2x)}{4} + C'
+    ],
     difficulty: 'Avanzado'
   },
   {
     id: 7,
-    expression: '∫ ln(x) dx',
-    answer: 'x·ln(x) - x + C',
-    hint: 'Integración por partes: u=ln(x), dv=dx',
+    expression: '\\int \\ln(x)\\,dx',
+    answer: 'x\\ln(x) - x + C',
+    hint: 'Integración por partes: u=\\ln(x),\\; dv=dx',
     method: 'Partes',
-    steps: ['u = ln(x) → du = 1/x dx', 'dv = dx → v = x', 'uv - ∫v du = x·ln(x) - ∫x·(1/x)dx', 'x·ln(x) - ∫dx = x·ln(x) - x + C'],
+    steps: [
+      'u = \\ln(x) \\to du = \\frac{1}{x}\\,dx',
+      'dv = dx \\to v = x',
+      'uv - \\int v\\,du = x\\ln(x) - \\int x \\cdot \\frac{1}{x}\\,dx',
+      'x\\ln(x) - \\int dx = x\\ln(x) - x + C'
+    ],
     difficulty: 'Avanzado'
   },
   {
     id: 8,
-    expression: '∫ 5/(x² - 9) dx',
-    answer: '(5/6)·ln|(x-3)/(x+3)| + C',
-    hint: 'Factoriza x²-9 = (x-3)(x+3) y usa fracciones parciales',
+    expression: '\\int \\frac{5}{x^2 - 9}\\,dx',
+    answer: '\\frac{5}{6}\\ln\\left|\\frac{x-3}{x+3}\\right| + C',
+    hint: 'Factoriza x^2-9 = (x-3)(x+3) y usa fracciones parciales',
     method: 'Fracciones Parciales',
-    steps: ['Factorizar: (x-3)(x+3)', '5/((x-3)(x+3)) = A/(x-3) + B/(x+3)', 'A = 5/6, B = -5/6', '(5/6)ln|x-3| - (5/6)ln|x+3| + C', '(5/6)ln|(x-3)/(x+3)| + C'],
+    steps: [
+      '\\text{Factorizar: } (x-3)(x+3)',
+      '\\frac{5}{(x-3)(x+3)} = \\frac{A}{x-3} + \\frac{B}{x+3}',
+      'A = \\frac{5}{6},\\; B = -\\frac{5}{6}',
+      '\\frac{5}{6}\\ln|x-3| - \\frac{5}{6}\\ln|x+3| + C',
+      '\\frac{5}{6}\\ln\\left|\\frac{x-3}{x+3}\\right| + C'
+    ],
     difficulty: 'Avanzado'
   }
 ];
@@ -100,7 +138,6 @@ export default function IntegralCalculator() {
   const checkAnswer = () => {
     const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
     const userNorm = normalize(userAnswer);
-    const answerNorm = normalize(problem.answer);
     
     // Flexible checking
     const correct = userNorm.includes('x^4/4') && problem.id === 1 ||
@@ -179,7 +216,9 @@ export default function IntegralCalculator() {
 
           <div className="bg-slate-900/50 rounded-lg p-6 text-center mb-6 border border-slate-700/30">
             <p className="text-sm text-slate-400 mb-2">Resolver:</p>
-            <p className="text-2xl font-mono text-white">{problem.expression}</p>
+            <div className="overflow-x-auto">
+              <Math tex={problem.expression} display={true} />
+            </div>
           </div>
 
           {/* Answer Input */}
@@ -232,8 +271,11 @@ export default function IntegralCalculator() {
                 </span>
               </div>
               <p className="text-sm text-slate-300">
-                Respuesta correcta: <span className="font-mono text-white">{problem.answer}</span>
+                Respuesta correcta:
               </p>
+              <div className="mt-1 overflow-x-auto">
+                <Math tex={problem.answer} className="text-white" />
+              </div>
             </motion.div>
           )}
         </motion.div>
@@ -250,13 +292,13 @@ export default function IntegralCalculator() {
               <span className="font-medium">Ver Pista</span>
             </button>
             {showHint && (
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="mt-3 text-sm text-slate-300 bg-amber-900/10 rounded-lg p-3 border border-amber-500/20"
               >
-                💡 {problem.hint}
-              </motion.p>
+                💡 <Math tex={problem.hint} />
+              </motion.div>
             )}
           </div>
 
@@ -280,7 +322,9 @@ export default function IntegralCalculator() {
                     <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                       <span className="text-xs font-bold text-blue-400">{i + 1}</span>
                     </div>
-                    <p className="text-sm text-slate-300 font-mono">{step}</p>
+                    <div className="text-sm text-slate-300 overflow-x-auto">
+                      <Math tex={step} />
+                    </div>
                   </div>
                 ))}
               </motion.div>
@@ -293,9 +337,10 @@ export default function IntegralCalculator() {
             className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 text-left hover:border-blue-500/30 transition-all group"
           >
             <p className="text-sm text-slate-400">Siguiente problema</p>
-            <p className="text-white font-medium group-hover:text-blue-300 transition-colors">
-              {problems[(selectedProblem + 1) % problems.length].expression} →
-            </p>
+            <div className="mt-1 overflow-x-auto">
+              <Math tex={problems[(selectedProblem + 1) % problems.length].expression} className="text-white group-hover:text-blue-300 transition-colors" />
+              <span className="text-blue-400 ml-2">→</span>
+            </div>
           </button>
         </div>
       </div>

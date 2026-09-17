@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowRight } from 'lucide-react';
+import Math from './Math';
 
 interface Method {
   id: string;
@@ -19,34 +20,34 @@ const methods: Method[] = [
     name: 'Sustitución (Cambio de Variable)',
     subtitle: 'Método u-sustitución',
     when: 'Cuando identificas una función compuesta donde la derivada del argumento interno está presente (o un múltiplo de ella).',
-    formula: '∫f(g(x))·g\'(x)dx = ∫f(u)du, donde u = g(x)',
+    formula: '\\int f(g(x)) \\cdot g\'(x)\\,dx = \\int f(u)\\,du, \\quad u = g(x)',
     steps: [
       'Identifica u = g(x) como la parte "interna" de la función compuesta',
-      'Calcula du = g\'(x)dx',
-      'Sustituye en la integral para obtener ∫f(u)du',
+      'Calcula du = g\'(x)\\,dx',
+      'Sustituye en la integral para obtener \\int f(u)\\,du',
       'Resuelve la integral en términos de u',
       'Regresa a la variable original: reemplaza u por g(x)'
     ],
     examples: [
       {
-        problem: '∫ 2x·cos(x²) dx',
+        problem: '\\int 2x \\cdot \\cos(x^2)\\,dx',
         steps: [
-          'Sea u = x², entonces du = 2x dx',
-          'Sustituyendo: ∫ cos(u) du',
-          'Integramos: sen(u) + C',
-          'Regresamos: sen(x²) + C'
+          'Sea u = x^2, \\text{ entonces } du = 2x\\,dx',
+          'Sustituyendo: \\int \\cos(u)\\,du',
+          'Integramos: \\sin(u) + C',
+          'Regresamos: \\sin(x^2) + C'
         ],
-        result: 'sen(x²) + C'
+        result: '\\sin(x^2) + C'
       },
       {
-        problem: '∫ e^(3x) dx',
+        problem: '\\int e^{3x}\\,dx',
         steps: [
-          'Sea u = 3x, entonces du = 3 dx → dx = du/3',
-          'Sustituyendo: (1/3)∫ e^u du',
-          'Integramos: (1/3)e^u + C',
-          'Regresamos: (1/3)e^(3x) + C'
+          'Sea u = 3x, \\text{ entonces } du = 3\\,dx \\Rightarrow dx = \\frac{du}{3}',
+          'Sustituyendo: \\frac{1}{3}\\int e^u\\,du',
+          'Integramos: \\frac{1}{3}e^u + C',
+          'Regresamos: \\frac{1}{3}e^{3x} + C'
         ],
-        result: '(1/3)e^(3x) + C'
+        result: '\\frac{1}{3}e^{3x} + C'
       }
     ],
     color: 'from-blue-500 to-cyan-500'
@@ -56,36 +57,36 @@ const methods: Method[] = [
     name: 'Integración por Partes',
     subtitle: 'Método LIATE',
     when: 'Cuando la integral es producto de dos funciones de diferente naturaleza (polinomio × exponencial, polinomio × trigonométrica, etc.)',
-    formula: '∫u dv = uv - ∫v du',
+    formula: '\\int u\\,dv = uv - \\int v\\,du',
     steps: [
       'Identifica u y dv usando la regla LIATE (Logarítmica, Inversa trig., Algebraica, Trigonométrica, Exponencial)',
-      'Calcula du = u\'dx derivando u',
-      'Calcula v = ∫dv integrando dv',
-      'Aplica la fórmula: uv - ∫v du',
+      'Calcula du = u\'\\,dx derivando u',
+      'Calcula v = \\int dv integrando dv',
+      'Aplica la fórmula: uv - \\int v\\,du',
       'Si es necesario, aplica el método nuevamente'
     ],
     examples: [
       {
-        problem: '∫ x·eˣ dx',
+        problem: '\\int x \\cdot e^x\\,dx',
         steps: [
-          'u = x (algebraica), dv = eˣdx',
-          'du = dx, v = eˣ',
-          'Aplicando: x·eˣ - ∫eˣ dx',
-          'Resolviendo: x·eˣ - eˣ + C',
-          'Factorizando: eˣ(x - 1) + C'
+          'u = x \\text{ (algebraica)},\\; dv = e^x\\,dx',
+          'du = dx,\\; v = e^x',
+          '\\text{Aplicando: } x \\cdot e^x - \\int e^x\\,dx',
+          '\\text{Resolviendo: } x \\cdot e^x - e^x + C',
+          '\\text{Factorizando: } e^x(x - 1) + C'
         ],
-        result: 'eˣ(x - 1) + C'
+        result: 'e^x(x - 1) + C'
       },
       {
-        problem: '∫ x²·ln(x) dx',
+        problem: '\\int x^2 \\cdot \\ln(x)\\,dx',
         steps: [
-          'u = ln(x) (logarítmica), dv = x²dx',
-          'du = (1/x)dx, v = x³/3',
-          'Aplicando: (x³/3)ln(x) - ∫(x³/3)(1/x)dx',
-          'Simplificando: (x³/3)ln(x) - (1/3)∫x²dx',
-          'Resolviendo: (x³/3)ln(x) - x³/9 + C'
+          'u = \\ln(x) \\text{ (logarítmica)},\\; dv = x^2\\,dx',
+          'du = \\frac{1}{x}\\,dx,\\; v = \\frac{x^3}{3}',
+          '\\text{Aplicando: } \\frac{x^3}{3}\\ln(x) - \\int \\frac{x^3}{3} \\cdot \\frac{1}{x}\\,dx',
+          '\\text{Simplificando: } \\frac{x^3}{3}\\ln(x) - \\frac{1}{3}\\int x^2\\,dx',
+          '\\text{Resolviendo: } \\frac{x^3}{3}\\ln(x) - \\frac{x^3}{9} + C'
         ],
-        result: '(x³/3)ln(x) - x³/9 + C'
+        result: '\\frac{x^3}{3}\\ln(x) - \\frac{x^3}{9} + C'
       }
     ],
     color: 'from-purple-500 to-pink-500'
@@ -95,7 +96,7 @@ const methods: Method[] = [
     name: 'Fracciones Parciales',
     subtitle: 'Descomposición en fracciones simples',
     when: 'Cuando el integrando es una fracción racional P(x)/Q(x) donde el grado de P es menor que el grado de Q.',
-    formula: 'P(x)/Q(x) = A/(x-a) + B/(x-b) + ...',
+    formula: '\\frac{P(x)}{Q(x)} = \\frac{A}{x-a} + \\frac{B}{x-b} + \\cdots',
     steps: [
       'Verifica que el grado del numerador sea menor que el del denominador',
       'Factoriza completamente el denominador Q(x)',
@@ -105,15 +106,15 @@ const methods: Method[] = [
     ],
     examples: [
       {
-        problem: '∫ 1/(x²-1) dx',
+        problem: '\\int \\frac{1}{x^2 - 1}\\,dx',
         steps: [
-          'Factorizamos: x²-1 = (x-1)(x+1)',
-          'Descomponemos: 1/((x-1)(x+1)) = A/(x-1) + B/(x+1)',
-          'Resolvemos: 1 = A(x+1) + B(x-1)',
-          'x=1: A=1/2 | x=-1: B=-1/2',
-          'Integramos: (1/2)ln|x-1| - (1/2)ln|x+1| + C'
+          '\\text{Factorizamos: } x^2 - 1 = (x-1)(x+1)',
+          '\\text{Descomponemos: } \\frac{1}{(x-1)(x+1)} = \\frac{A}{x-1} + \\frac{B}{x+1}',
+          '\\text{Resolvemos: } 1 = A(x+1) + B(x-1)',
+          'x=1: A=\\frac{1}{2} \\;|\\; x=-1: B=-\\frac{1}{2}',
+          '\\text{Integramos: } \\frac{1}{2}\\ln|x-1| - \\frac{1}{2}\\ln|x+1| + C'
         ],
-        result: '(1/2)ln|(x-1)/(x+1)| + C'
+        result: '\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right| + C'
       }
     ],
     color: 'from-emerald-500 to-teal-500'
@@ -122,26 +123,26 @@ const methods: Method[] = [
     id: 'trig',
     name: 'Integrales Trigonométricas',
     subtitle: 'Identidades y reducción',
-    when: 'Cuando el integrando contiene productos de funciones trigonométricas como senⁿ(x)cosᵐ(x), tanⁿ(x)secᵐ(x), etc.',
-    formula: 'sen²(x) + cos²(x) = 1 | sen(2x) = 2sen(x)cos(x)',
+    when: 'Cuando el integrando contiene productos de funciones trigonométricas como \\sin^n(x)\\cos^m(x), \\tan^n(x)\\sec^m(x), etc.',
+    formula: '\\sin^2(x) + \\cos^2(x) = 1 \\;|\\; \\sin(2x) = 2\\sin(x)\\cos(x)',
     steps: [
       'Identifica el tipo de producto trigonométrico',
-      'Si hay sen impar: guarda un sen(x) y convierte el resto a cosenos',
-      'Si hay cos impar: guarda un cos(x) y convierte el resto a senos',
+      'Si hay \\sin impar: guarda un \\sin(x) y convierte el resto a cosenos',
+      'Si hay \\cos impar: guarda un \\cos(x) y convierte el resto a senos',
       'Si ambos son pares: usa identidades de ángulo doble',
       'Aplica sustitución si es necesario'
     ],
     examples: [
       {
-        problem: '∫ sen³(x) dx',
+        problem: '\\int \\sin^3(x)\\,dx',
         steps: [
-          'Reescribimos: ∫ sen²(x)·sen(x) dx',
-          'Identidad: sen²(x) = 1 - cos²(x)',
-          'Sustitución: u = cos(x), du = -sen(x)dx',
-          '∫ -(1-u²)du = -u + u³/3 + C',
-          'Resultado: -cos(x) + cos³(x)/3 + C'
+          '\\text{Reescribimos: } \\int \\sin^2(x) \\cdot \\sin(x)\\,dx',
+          '\\text{Identidad: } \\sin^2(x) = 1 - \\cos^2(x)',
+          '\\text{Sustitución: } u = \\cos(x),\\; du = -\\sin(x)\\,dx',
+          '\\int -(1-u^2)\\,du = -u + \\frac{u^3}{3} + C',
+          '\\text{Resultado: } -\\cos(x) + \\frac{\\cos^3(x)}{3} + C'
         ],
-        result: '-cos(x) + cos³(x)/3 + C'
+        result: '-\\cos(x) + \\frac{\\cos^3(x)}{3} + C'
       }
     ],
     color: 'from-amber-500 to-orange-500'
@@ -149,9 +150,9 @@ const methods: Method[] = [
   {
     id: 'trig-sub',
     name: 'Sustitución Trigonométrica',
-    subtitle: 'Para expresiones con √(a²-x²), √(a²+x²), √(x²-a²)',
-    when: 'Cuando aparece una raíz cuadrada de la forma √(a²-x²), √(a²+x²) o √(x²-a²) en el integrando.',
-    formula: '√(a²-x²)→x=asen(θ) | √(a²+x²)→x=atan(θ) | √(x²-a²)→x=asec(θ)',
+    subtitle: 'Para expresiones con \\sqrt{a^2-x^2}, \\sqrt{a^2+x^2}, \\sqrt{x^2-a^2}',
+    when: 'Cuando aparece una raíz cuadrada de la forma \\sqrt{a^2-x^2}, \\sqrt{a^2+x^2} o \\sqrt{x^2-a^2} en el integrando.',
+    formula: '\\sqrt{a^2-x^2} \\to x=a\\sin\\theta \\;|\\; \\sqrt{a^2+x^2} \\to x=a\\tan\\theta \\;|\\; \\sqrt{x^2-a^2} \\to x=a\\sec\\theta',
     steps: [
       'Identifica la forma de la expresión radical',
       'Aplica la sustitución trigonométrica correspondiente',
@@ -161,16 +162,16 @@ const methods: Method[] = [
     ],
     examples: [
       {
-        problem: '∫ 1/√(1-x²) dx',
+        problem: '\\int \\frac{1}{\\sqrt{1-x^2}}\\,dx',
         steps: [
-          'Forma: √(a²-x²) con a=1',
-          'Sustitución: x = sen(θ), dx = cos(θ)dθ',
-          '√(1-sen²θ) = cos(θ)',
-          '∫ cos(θ)/cos(θ) dθ = ∫ dθ = θ + C',
-          'Regresamos: θ = arcsen(x)',
-          'Resultado: arcsen(x) + C'
+          '\\text{Forma: } \\sqrt{a^2-x^2} \\text{ con } a=1',
+          '\\text{Sustitución: } x = \\sin(\\theta),\\; dx = \\cos(\\theta)\\,d\\theta',
+          '\\sqrt{1-\\sin^2\\theta} = \\cos(\\theta)',
+          '\\int \\frac{\\cos(\\theta)}{\\cos(\\theta)}\\,d\\theta = \\int d\\theta = \\theta + C',
+          '\\text{Regresamos: } \\theta = \\arcsin(x)',
+          '\\text{Resultado: } \\arcsin(x) + C'
         ],
-        result: 'arcsen(x) + C'
+        result: '\\arcsin(x) + C'
       }
     ],
     color: 'from-rose-500 to-red-500'
@@ -180,7 +181,7 @@ const methods: Method[] = [
     name: 'Integrales Impropias',
     subtitle: 'Límites infinitos y discontinuidades',
     when: 'Cuando los límites de integración son infinitos o la función tiene discontinuidades en el intervalo.',
-    formula: '∫ₐ^∞ f(x)dx = lim(t→∞) ∫ₐᵗ f(x)dx',
+    formula: '\\int_a^{\\infty} f(x)\\,dx = \\lim_{t \\to \\infty} \\int_a^t f(x)\\,dx',
     steps: [
       'Identifica el tipo de impropiedad (límite infinito o discontinuidad)',
       'Reemplaza el límite impropio por una variable t',
@@ -190,15 +191,15 @@ const methods: Method[] = [
     ],
     examples: [
       {
-        problem: '∫₁^∞ 1/x² dx',
+        problem: '\\int_1^{\\infty} \\frac{1}{x^2}\\,dx',
         steps: [
-          'Reemplazamos: lim(t→∞) ∫₁ᵗ 1/x² dx',
-          'Integramos: lim(t→∞) [-1/x]₁ᵗ',
-          'Evaluamos: lim(t→∞) (-1/t + 1)',
-          'Límite: 0 + 1 = 1',
-          'La integral converge a 1'
+          '\\text{Reemplazamos: } \\lim_{t \\to \\infty} \\int_1^t \\frac{1}{x^2}\\,dx',
+          '\\text{Integramos: } \\lim_{t \\to \\infty} \\left[-\\frac{1}{x}\\right]_1^t',
+          '\\text{Evaluamos: } \\lim_{t \\to \\infty} \\left(-\\frac{1}{t} + 1\\right)',
+          '\\text{Límite: } 0 + 1 = 1',
+          '\\text{La integral converge a } 1'
         ],
-        result: '1 (converge)'
+        result: '1 \\quad \\text{(converge)}'
       }
     ],
     color: 'from-indigo-500 to-violet-500'
@@ -266,7 +267,9 @@ export default function IntegrationMethods() {
           {/* Formula */}
           <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30 mb-4">
             <p className="text-sm font-semibold text-purple-400 mb-2">Fórmula General</p>
-            <p className="text-lg font-mono text-purple-200 text-center">{currentMethod.formula}</p>
+            <div className="overflow-x-auto py-2">
+              <Math tex={currentMethod.formula} display={true} />
+            </div>
           </div>
 
           {/* Steps */}
@@ -278,7 +281,9 @@ export default function IntegrationMethods() {
                   <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-xs font-bold text-emerald-400">{i + 1}</span>
                   </div>
-                  <p className="text-sm text-slate-300">{step}</p>
+                  <div className="text-sm text-slate-300 overflow-x-auto">
+                    <Math tex={step} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -295,8 +300,10 @@ export default function IntegrationMethods() {
                   onClick={() => setShowExample(showExample === i ? null : i)}
                   className="w-full flex items-center justify-between p-4 bg-slate-900/30 hover:bg-slate-900/50 transition-colors"
                 >
-                  <span className="font-mono text-blue-300">{ex.problem}</span>
-                  <ChevronRight size={16} className={`text-slate-400 transition-transform ${showExample === i ? 'rotate-90' : ''}`} />
+                  <div className="overflow-x-auto">
+                    <Math tex={ex.problem} className="text-blue-300" />
+                  </div>
+                  <ChevronRight size={16} className={`text-slate-400 transition-transform flex-shrink-0 ml-2 ${showExample === i ? 'rotate-90' : ''}`} />
                 </button>
                 {showExample === i && (
                   <motion.div
@@ -307,12 +314,14 @@ export default function IntegrationMethods() {
                     {ex.steps.map((step, j) => (
                       <div key={j} className="flex items-center gap-2 text-sm">
                         <ArrowRight size={12} className="text-emerald-400 flex-shrink-0" />
-                        <span className="text-slate-300">{step}</span>
+                        <div className="overflow-x-auto">
+                          <Math tex={step} />
+                        </div>
                       </div>
                     ))}
                     <div className="mt-3 pt-3 border-t border-slate-700/30">
                       <span className="text-sm text-slate-400">Resultado: </span>
-                      <span className="font-mono text-emerald-300 font-semibold">{ex.result}</span>
+                      <Math tex={ex.result} className="text-emerald-300 font-semibold" />
                     </div>
                   </motion.div>
                 )}

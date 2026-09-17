@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Ruler, Box, Gauge, DollarSign, Atom, Droplets } from 'lucide-react';
+import MathTex from './Math';
 
 interface Application {
   id: string;
@@ -26,17 +27,17 @@ const applications: Application[] = [
     icon: Ruler,
     color: 'from-blue-500 to-cyan-500',
     description: 'El área entre dos curvas f(x) y g(x) desde a hasta b se calcula integrando la diferencia de las funciones.',
-    formula: 'A = ∫ₐᵇ |f(x) - g(x)| dx',
+    formula: 'A = \\int_a^b |f(x) - g(x)|\\,dx',
     example: {
-      problem: 'Hallar el área entre f(x) = x² y g(x) = x en [0,1]',
+      problem: '\\text{Hallar el área entre } f(x) = x^2 \\text{ y } g(x) = x \\text{ en } [0,1]',
       solution: [
-        'Puntos de intersección: x² = x → x=0, x=1',
-        'En [0,1]: x ≥ x², así que f(x) - g(x) = x - x²',
-        'A = ∫₀¹ (x - x²) dx',
-        'A = [x²/2 - x³/3]₀¹',
-        'A = 1/2 - 1/3 = 1/6'
+        '\\text{Puntos de intersección: } x^2 = x \\Rightarrow x=0,\\; x=1',
+        '\\text{En } [0,1]:\\; x \\geq x^2, \\text{ así que } f(x) - g(x) = x - x^2',
+        'A = \\int_0^1 (x - x^2)\\,dx',
+        'A = \\left[\\frac{x^2}{2} - \\frac{x^3}{3}\\right]_0^1',
+        'A = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6}'
       ],
-      result: 'A = 1/6 ≈ 0.167 unidades²'
+      result: 'A = \\frac{1}{6} \\approx 0.167 \\text{ unidades}^2'
     },
     graphData: Array.from({ length: 50 }, (_, i) => {
       const x = i / 50;
@@ -50,17 +51,17 @@ const applications: Application[] = [
     icon: Box,
     color: 'from-purple-500 to-pink-500',
     description: 'El volumen de un sólido de revolución generado al rotar f(x) alrededor del eje x.',
-    formula: 'V = π ∫ₐᵇ [f(x)]² dx',
+    formula: 'V = \\pi \\int_a^b [f(x)]^2\\,dx',
     example: {
-      problem: 'Volumen al rotar f(x) = √x alrededor del eje x en [0,4]',
+      problem: '\\text{Volumen al rotar } f(x) = \\sqrt{x} \\text{ alrededor del eje x en } [0,4]',
       solution: [
-        'V = π ∫₀⁴ (√x)² dx',
-        'V = π ∫₀⁴ x dx',
-        'V = π [x²/2]₀⁴',
-        'V = π (16/2 - 0)',
-        'V = 8π'
+        'V = \\pi \\int_0^4 (\\sqrt{x})^2\\,dx',
+        'V = \\pi \\int_0^4 x\\,dx',
+        'V = \\pi \\left[\\frac{x^2}{2}\\right]_0^4',
+        'V = \\pi \\left(\\frac{16}{2} - 0\\right)',
+        'V = 8\\pi'
       ],
-      result: 'V = 8π ≈ 25.13 unidades³'
+      result: 'V = 8\\pi \\approx 25.13 \\text{ unidades}^3'
     },
     graphData: Array.from({ length: 50 }, (_, i) => {
       const x = (i / 50) * 4;
@@ -74,18 +75,17 @@ const applications: Application[] = [
     icon: Gauge,
     color: 'from-emerald-500 to-teal-500',
     description: 'La longitud de la curva y = f(x) desde a hasta b.',
-    formula: 'L = ∫ₐᵇ √(1 + [f\'(x)]²) dx',
+    formula: 'L = \\int_a^b \\sqrt{1 + [f\'(x)]^2}\\,dx',
     example: {
-      problem: 'Longitud de arco de f(x) = x^(3/2) en [0,1]',
+      problem: '\\text{Longitud de arco de } f(x) = x^{3/2} \\text{ en } [0,1]',
       solution: [
-        'f\'(x) = (3/2)x^(1/2)',
-        '[f\'(x)]² = (9/4)x',
-        'L = ∫₀¹ √(1 + 9x/4) dx',
-        'Sustitución: u = 1 + 9x/4, du = 9/4 dx',
-        'L = (4/9) · (2/3) · [(13/4)^(3/2) - 1]',
-        'L = (8/27)[(13/4)^(3/2) - 1]'
+        'f\'(x) = \\frac{3}{2}x^{1/2}',
+        '[f\'(x)]^2 = \\frac{9}{4}x',
+        'L = \\int_0^1 \\sqrt{1 + \\frac{9x}{4}}\\,dx',
+        '\\text{Sustitución: } u = 1 + \\frac{9x}{4},\\; du = \\frac{9}{4}\\,dx',
+        'L = \\frac{4}{9} \\cdot \\frac{2}{3} \\cdot \\left[\\left(\\frac{13}{4}\\right)^{3/2} - 1\\right]'
       ],
-      result: 'L ≈ 1.44 unidades'
+      result: 'L \\approx 1.44 \\text{ unidades}'
     },
     graphData: Array.from({ length: 50 }, (_, i) => {
       const x = i / 50;
@@ -99,17 +99,17 @@ const applications: Application[] = [
     icon: Atom,
     color: 'from-amber-500 to-orange-500',
     description: 'El trabajo realizado por una fuerza variable F(x) al mover un objeto de a a b.',
-    formula: 'W = ∫ₐᵇ F(x) dx',
+    formula: 'W = \\int_a^b F(x)\\,dx',
     example: {
-      problem: 'Trabajo para estirar un resorte (Ley de Hooke: F = kx, k=200 N/m) de 0 a 0.3m',
+      problem: '\\text{Trabajo para estirar un resorte (Ley de Hooke: } F = kx,\\; k=200 \\text{ N/m) de 0 a 0.3m}',
       solution: [
         'F(x) = kx = 200x',
-        'W = ∫₀^0.3 200x dx',
-        'W = 200[x²/2]₀^0.3',
-        'W = 100(0.3)²',
+        'W = \\int_0^{0.3} 200x\\,dx',
+        'W = 200\\left[\\frac{x^2}{2}\\right]_0^{0.3}',
+        'W = 100(0.3)^2',
         'W = 100(0.09) = 9'
       ],
-      result: 'W = 9 Joules'
+      result: 'W = 9 \\text{ Joules}'
     },
     graphData: Array.from({ length: 50 }, (_, i) => {
       const x = (i / 50) * 0.3;
@@ -123,17 +123,17 @@ const applications: Application[] = [
     icon: DollarSign,
     color: 'from-rose-500 to-red-500',
     description: 'En economía, el excedente del consumidor mide el beneficio adicional que obtienen los compradores.',
-    formula: 'EC = ∫₀Q [D(x) - P*] dx',
+    formula: 'EC = \\int_0^Q [D(x) - P^*]\\,dx',
     example: {
-      problem: 'Demanda: D(x) = 100 - x², precio de equilibrio P* = 75, Q = 5',
+      problem: '\\text{Demanda: } D(x) = 100 - x^2,\\; \\text{precio de equilibrio } P^* = 75,\\; Q = 5',
       solution: [
-        'EC = ∫₀⁵ [(100-x²) - 75] dx',
-        'EC = ∫₀⁵ (25 - x²) dx',
-        'EC = [25x - x³/3]₀⁵',
-        'EC = 125 - 125/3',
-        'EC = 250/3'
+        'EC = \\int_0^5 [(100-x^2) - 75]\\,dx',
+        'EC = \\int_0^5 (25 - x^2)\\,dx',
+        'EC = \\left[25x - \\frac{x^3}{3}\\right]_0^5',
+        'EC = 125 - \\frac{125}{3}',
+        'EC = \\frac{250}{3}'
       ],
-      result: 'EC = 250/3 ≈ 83.33 unidades monetarias'
+      result: 'EC = \\frac{250}{3} \\approx 83.33 \\text{ unidades monetarias}'
     },
     graphData: Array.from({ length: 50 }, (_, i) => {
       const x = (i / 50) * 5;
@@ -147,19 +147,19 @@ const applications: Application[] = [
     icon: Droplets,
     color: 'from-indigo-500 to-violet-500',
     description: 'La fuerza ejercida por un fluido sobre una superficie sumergida.',
-    formula: 'F = ∫ₐᵇ ρg·d(x)·w(x) dx',
+    formula: 'F = \\int_a^b \\rho g \\cdot d(x) \\cdot w(x)\\,dx',
     example: {
-      problem: 'Fuerza sobre una placa rectangular vertical de 2m de ancho y 3m de alto, sumergida con su borde superior a 1m de la superficie',
+      problem: '\\text{Fuerza sobre una placa rectangular vertical de 2m de ancho y 3m de alto, sumergida con su borde superior a 1m de la superficie}',
       solution: [
-        'ρ = 1000 kg/m³, g = 9.8 m/s²',
-        'Profundidad: d(x) = 1 + x (x desde 0 hasta 3)',
-        'Ancho: w(x) = 2m (constante)',
-        'F = ∫₀³ 1000·9.8·(1+x)·2 dx',
-        'F = 19600 ∫₀³ (1+x) dx',
-        'F = 19600 [x + x²/2]₀³',
-        'F = 19600 (3 + 4.5) = 19600(7.5)'
+        '\\rho = 1000 \\text{ kg/m}^3,\\; g = 9.8 \\text{ m/s}^2',
+        '\\text{Profundidad: } d(x) = 1 + x \\text{ (x desde 0 hasta 3)}',
+        '\\text{Ancho: } w(x) = 2\\text{m (constante)}',
+        'F = \\int_0^3 1000 \\cdot 9.8 \\cdot (1+x) \\cdot 2\\,dx',
+        'F = 19600 \\int_0^3 (1+x)\\,dx',
+        'F = 19600 \\left[x + \\frac{x^2}{2}\\right]_0^3',
+        'F = 19600(3 + 4.5) = 19600(7.5)'
       ],
-      result: 'F = 147,000 N = 147 kN'
+      result: 'F = 147{,}000 \\text{ N} = 147 \\text{ kN}'
     },
     graphData: Array.from({ length: 50 }, (_, i) => {
       const x = (i / 50) * 3;
@@ -229,7 +229,9 @@ export default function Applications() {
             
             <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30 mb-4">
               <p className="text-sm text-slate-400 mb-1">Fórmula General</p>
-              <p className="text-lg font-mono text-purple-300 text-center">{currentApp.formula}</p>
+              <div className="overflow-x-auto py-2">
+                <MathTex tex={currentApp.formula} display={true} />
+              </div>
             </div>
           </div>
 
@@ -237,7 +239,9 @@ export default function Applications() {
           <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
             <h4 className="text-lg font-semibold text-white mb-3">📝 Ejemplo Resuelto</h4>
             <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-500/20 mb-4">
-              <p className="text-sm text-blue-300 font-medium">{currentApp.example.problem}</p>
+              <div className="overflow-x-auto">
+                <MathTex tex={currentApp.example.problem} className="text-blue-300" />
+              </div>
             </div>
             
             <button
@@ -258,11 +262,16 @@ export default function Applications() {
                     <span className="text-xs font-bold text-emerald-400 bg-emerald-500/20 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
                       {i + 1}
                     </span>
-                    <p className="text-sm text-slate-300 font-mono">{step}</p>
+                    <div className="text-sm text-slate-300 overflow-x-auto">
+                      <MathTex tex={step} />
+                    </div>
                   </div>
                 ))}
                 <div className="bg-emerald-900/20 rounded-lg p-3 border border-emerald-500/20 mt-2">
-                  <p className="text-sm text-emerald-400 font-semibold">✅ Resultado: {currentApp.example.result}</p>
+                  <p className="text-sm text-emerald-400 font-semibold">✅ Resultado:</p>
+                  <div className="mt-1 overflow-x-auto">
+                    <MathTex tex={currentApp.example.result} className="text-emerald-200" />
+                  </div>
                 </div>
               </motion.div>
             )}
