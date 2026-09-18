@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, BookOpen, Calculator, BarChart3, Award, 
-  GraduationCap, ChevronRight, Menu, X, Zap
+  GraduationCap, ChevronRight, Menu, X, Zap, FileText
 } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Theory from './components/Theory';
@@ -11,8 +11,9 @@ import IntegralCalculator from './components/IntegralCalculator';
 import Exercises from './components/Exercises';
 import Graphs from './components/Graphs';
 import Applications from './components/Applications';
+import Evaluation from './components/Evaluation';
 
-type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications';
+type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications' | 'evaluation';
 
 const navItems = [
   { id: 'dashboard' as Section, label: 'Dashboard', icon: Home },
@@ -22,6 +23,7 @@ const navItems = [
   { id: 'exercises' as Section, label: 'Ejercicios', icon: Award },
   { id: 'graphs' as Section, label: 'Gráficas', icon: BarChart3 },
   { id: 'applications' as Section, label: 'Aplicaciones', icon: Zap },
+  { id: 'evaluation' as Section, label: 'Evaluación', icon: FileText },
 ];
 
 export default function App() {
@@ -37,6 +39,7 @@ export default function App() {
       case 'exercises': return <Exercises />;
       case 'graphs': return <Graphs />;
       case 'applications': return <Applications />;
+      case 'evaluation': return <Evaluation />;
       default: return <Dashboard onNavigate={setActiveSection} />;
     }
   };
@@ -128,6 +131,7 @@ export default function App() {
                   {activeSection === 'exercises' && 'Practica con ejercicios interactivos'}
                   {activeSection === 'graphs' && 'Visualización gráfica de funciones'}
                   {activeSection === 'applications' && 'Aplicaciones reales de la integración'}
+                  {activeSection === 'evaluation' && 'Evaluación integral: cálculo + desarrollo de software'}
                 </p>
               </div>
             </div>

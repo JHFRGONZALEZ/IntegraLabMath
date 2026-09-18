@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación de Cálculo Integral - Desarrollo de Software</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: white;
+  color: #1a1a1a;
+  line-height: 1.6;
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+header {
+  border-bottom: 3px solid #e94560;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+header h1 {
+  color: #e94560;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+header .subtitle {
+  color: #666;
+  font-size: 14px;
+}
+.info-box {
+  background: #f8f9fa;
+  border-left: 4px solid #e94560;
+  padding: 15px;
+  margin: 20px 0;
+}
+.info-box h3 {
+  color: #e94560;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.section {
+  margin: 30px 0;
+  page-break-inside: avoid;
+}
+.section h2 {
+  color: #e94560;
+  font-size: 20px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #0f3460;
+  padding-bottom: 8px;
+}
+.section h3 {
+  color: #0f3460;
+  font-size: 16px;
+  margin: 20px 0 10px 0;
+}
+.problem {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+}
+.problem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.problem-number {
+  font-weight: bold;
+  color: #0f3460;
+  font-size: 14px;
+}
+.problem-points {
+  background: #e94560;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.problem-content {
+  font-size: 14px;
+  color: #333;
+}
+.math-block {
+  background: rgba(15, 52, 96, 0.05);
+  padding: 15px;
+  border-radius: 6px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+}
+.requirements {
+  margin: 20px 0;
+}
+.requirement {
+  background: #f8f9fa;
+  border-left: 3px solid #22c55e;
+  padding: 12px;
+  margin: 10px 0;
+}
+.requirement h4 {
+  color: #22c55e;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.requirement p {
+  font-size: 13px;
+  color: #555;
+}
+.tech-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 20px 0;
+}
+.tech-box {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+}
+.tech-box h4 {
+  color: #0f3460;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tech-box ul {
+  list-style: none;
+  font-size: 13px;
+}
+.tech-box li {
+  padding: 4px 0;
+  color: #555;
+}
+.tech-box li:before {
+  content: "•";
+  color: #e94560;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+.timeline {
+  margin: 20px 0;
+}
+.timeline-item {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+.timeline-date {
+  background: #e94560;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 120px;
+  text-align: center;
+}
+.timeline-content {
+  flex: 1;
+  font-size: 13px;
+  color: #555;
+}
+.warning {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px 0;
+}
+.warning h4 {
+  color: #856404;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.warning p {
+  font-size: 13px;
+  color: #856404;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  font-size: 13px;
+}
+th {
+  background: #0f3460;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+td {
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+tr:nth-child(even) {
+  background: #f8f9fa;
+}
+.total-row {
+  background: #e94560 !important;
+  color: white;
+  font-weight: bold;
+}
+.grade-scale {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+.grade-box {
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid;
+}
+.grade-box h4 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+.grade-box p {
+  font-size: 12px;
+}
+.grade-a { background: #d4edda; border-color: #22c55e; color: #155724; }
+.grade-b { background: #d1ecf1; border-color: #3b82f6; color: #0c5460; }
+.grade-c { background: #fff3cd; border-color: #f59e0b; color: #856404; }
+.grade-d { background: #f8d7da; border-color: #ef4444; color: #721c24; }
+footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid #e94560;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+@media print {
+  body { padding: 20px; }
+  .no-print { display: none; }
+  .section { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>EVALUACIÓN INTEGRAL</h1>
+  <p class="subtitle">Cálculo Integral + Desarrollo de Software</p>
+</header>
+
+<div class="info-box">
+  <h3>Información General</h3>
+  <p><strong>Duración:</strong> 2 semanas (Parte I: 1 semana | Parte II: 1 semana)</p>
+  <p><strong>Valor:</strong> 100% de la nota final (Parte I: 40% | Parte II: 60%)</p>
+  <p><strong>Modalidad:</strong> Individual con defensa presencial del proyecto</p>
+</div>
+
+<div class="section">
+  <h2>🎯 Objetivo de la Evaluación</h2>
+  <p>Demostrar competencias en <strong>cálculo integral</strong> (antiderivadas, primitivas, sumas de Riemann, área bajo la curva y técnicas de integración) y aplicar esos conocimientos en el <strong>desarrollo de una plataforma web interactiva</strong> que permita visualizar y resolver problemas de integración, integrando matemáticas, programación y diseño de interfaces.</p>
+</div>
+
+<div class="section">
+  <h2>📐 PARTE I: Resolución de Problemas de Cálculo Integral (40 puntos)</h2>
+  <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Resuelva cada problema mostrando todo el procedimiento. Valor: 40% de la nota final.</p>
+
+  <h3>Sección A: Antiderivadas y Primitivas (8 puntos)</h3>
+  <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Encuentre la antiderivada (primitiva) de cada función. Incluya la constante de integración C.</p>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema A1</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int (4x^3 - 3x^2 + 2x - 7)\,dx$$
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema A2</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int \left(\frac{3}{x^2} - \frac{2}{\sqrt{x}} + 5e^x\right)\,dx$$
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema A3</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int \frac{x^2 + 3x + 2}{x}\,dx$$
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema A4</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int \left(\sec^2(x) + \frac{1}{1+x^2}\right)\,dx$$
+    </div>
+  </div>
+
+  <h3>Sección B: Sumas de Riemann (8 puntos)</h3>
+  <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Para la función \(f(x) = x^2\) en el intervalo \([0, 2]\):</p>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema B1</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="problem-content">
+      Calcule \(\Delta x\) y los puntos \(x_i\) para \(n = 4\) subintervalos.
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema B2</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="problem-content">
+      Calcule la <strong>Suma de Riemann por la izquierda</strong> \(L_4\).
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema B3</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="problem-content">
+      Calcule la <strong>Suma de Riemann por la derecha</strong> \(R_4\).
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema B4</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="problem-content">
+      Calcule la <strong>Suma de Riemann por punto medio</strong> \(M_4\) y compare con el valor exacto \(\int_0^2 x^2\,dx = \frac{8}{3}\).
+    </div>
+  </div>
+
+  <h3>Sección C: Área Bajo la Curva (8 puntos)</h3>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema C1</span>
+      <span class="problem-points">3 pts</span>
+    </div>
+    <div class="problem-content">
+      Calcule el área bajo \(f(x) = 2x + 1\) en \([0, 3]\) usando la definición de integral definida (límite de sumas de Riemann).
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema C2</span>
+      <span class="problem-points">3 pts</span>
+    </div>
+    <div class="problem-content">
+      Halle el área de la región encerrada entre \(f(x) = x^2\) y \(g(x) = 2x\).
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema C3</span>
+      <span class="problem-points">2 pts</span>
+    </div>
+    <div class="problem-content">
+      Explique con sus propias palabras la relación entre las Sumas de Riemann y el Área bajo la curva. Incluya un dibujo.
+    </div>
+  </div>
+
+  <h3>Sección D: Técnicas de Integración (16 puntos)</h3>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema D1 — Integración por partes</span>
+      <span class="problem-points">4 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int x \cdot e^{2x}\,dx$$
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema D2 — Fracciones parciales</span>
+      <span class="problem-points">4 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int \frac{3x + 2}{x^2 + x}\,dx$$
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema D3 — Sustitución</span>
+      <span class="problem-points">4 pts</span>
+    </div>
+    <div class="math-block">
+      $$\int \frac{x}{\sqrt{9 - x^2}}\,dx$$
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-number">Problema D4 — Integral impropia</span>
+      <span class="problem-points">4 pts</span>
+    </div>
+    <div class="problem-content">
+      ¿Converge o diverge? Justifique.
+    </div>
+    <div class="math-block">
+      $$\int_0^{\infty} e^{-x}\,dx$$
+    </div>
+  </div>
+
+  <div class="info-box" style="background: #fff3cd; border-left-color: #ffc107;">
+    <h3 style="color: #856404;">TOTAL PARTE I: 40 puntos</h3>
+  </div>
+</div>
+
+<div class="section">
+  <h2>💻 PARTE II: Proyecto de Desarrollo de Software (60 puntos)</h2>
+  <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Construya una plataforma web interactiva para enseñanza de cálculo integral. Valor: 60% de la nota final.</p>
+
+  <div class="info-box">
+    <h3>📋 ENUNCIADO DEL PROYECTO</h3>
+    <p style="font-size: 14px; line-height: 1.8;">
+      Como estudiante de <strong>Desarrollo de Software</strong>, usted debe diseñar y construir una <strong>plataforma web interactiva</strong> que sirva como herramienta didáctica para la enseñanza del cálculo integral. La plataforma debe permitir a los estudiantes <strong>visualizar, practicar y comprender</strong> los conceptos de integración de manera interactiva.
+    </p>
+  </div>
+
+  <h3>Requisitos Funcionales (Obligatorios)</h3>
+  <div class="requirements">
+    <div class="requirement">
+      <h4>1. Visualizador de Sumas de Riemann</h4>
+      <p>El usuario puede seleccionar función, intervalo [a,b], número de rectángulos (n) y tipo de suma (izquierda, derecha, punto medio). Se muestran los rectángulos sobre la curva en tiempo real.</p>
+    </div>
+    <div class="requirement">
+      <h4>2. Cálculo paso a paso</h4>
+      <p>La plataforma muestra el desarrollo completo: Δx, puntos de evaluación, tabla de valores, suma y resultado final con fórmulas renderizadas en LaTeX/KaTeX.</p>
+    </div>
+    <div class="requirement">
+      <h4>3. Gráfica de convergencia</h4>
+      <p>Una segunda gráfica muestra cómo la suma Sₙ converge al valor exacto cuando n crece.</p>
+    </div>
+    <div class="requirement">
+      <h4>4. Múltiples funciones</h4>
+      <p>Al menos 4 funciones predefinidas (x², sin(x), eˣ, etc.) y opción de ingresar función personalizada.</p>
+    </div>
+    <div class="requirement">
+      <h4>5. Tabla de convergencia</h4>
+      <p>Tabla que muestra los valores de S_izq, S_der, S_med y el error para diferentes valores de n.</p>
+    </div>
+    <div class="requirement">
+      <h4>6. Interfaz profesional</h4>
+      <p>Diseño responsive, modo oscuro, navegación clara y experiencia de usuario pulida.</p>
+    </div>
+  </div>
+
+  <h3>Requisitos Técnicos</h3>
+  <div class="tech-grid">
+    <div class="tech-box">
+      <h4>Frontend</h4>
+      <ul>
+        <li>HTML5 semántico</li>
+        <li>CSS3 (o Tailwind CSS)</li>
+        <li>JavaScript/TypeScript</li>
+        <li>Canvas API o SVG para gráficas</li>
+      </ul>
+    </div>
+    <div class="tech-box">
+      <h4>Librerías permitidas</h4>
+      <ul>
+        <li>KaTeX o MathJax (fórmulas)</li>
+        <li>React o Vue (opcional)</li>
+        <li>Chart.js o D3.js (opcional)</li>
+        <li>Cualquier librería justificada</li>
+      </ul>
+    </div>
+    <div class="tech-box">
+      <h4>Funcionalidades extra (bonus)</h4>
+      <ul>
+        <li>Animación de n creciente</li>
+        <li>Exportar resultados (PNG/TXT)</li>
+        <li>Comparación de tipos de suma</li>
+        <li>Valor exacto con antiderivada</li>
+      </ul>
+    </div>
+    <div class="tech-box">
+      <h4>Entregables</h4>
+      <ul>
+        <li>Código fuente completo</li>
+        <li>README.md con instrucciones</li>
+        <li>Demostración en vivo</li>
+        <li>Documento de diseño</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Cronograma de Entrega</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">Semana 1</div>
+      <div class="timeline-content">Parte I — Resolución de problemas de cálculo integral (entrega escrita) <strong>[40%]</strong></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Semana 2, Días 1-3</div>
+      <div class="timeline-content">Prototipo funcional: visualizador básico con canvas</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Semana 2, Días 4-5</div>
+      <div class="timeline-content">Implementación completa: paso a paso, convergencia, tabla</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Semana 2, Días 6-7</div>
+      <div class="timeline-content">Pulido, documentación y demostración final <strong>[60%]</strong></div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <h4>⚠️ NOTA IMPORTANTE</h4>
+    <p>
+      La plataforma que estás usando ahora mismo (<strong>IntegralLab Pro</strong>) es el <strong>ejemplo de referencia</strong>. No se espera que repliquen el 100% de su funcionalidad, pero sí deben demostrar comprensión de los conceptos matemáticos implementándolos en código. El <strong>visualizador de Sumas de Riemann</strong> es el componente mínimo obligatorio.
+    </p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🏆 Rúbrica de Evaluación</h2>
+
+  <h3>PARTE I: Cálculo Integral (40 puntos)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Criterio</th>
+        <th>Excelente</th>
+        <th>Bueno</th>
+        <th>Deficiente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Procedimiento</strong></td>
+        <td>Completo y claro</td>
+        <td>Parcial</td>
+        <td>Ausente o incorrecto</td>
+      </tr>
+      <tr>
+        <td><strong>Resultado</strong></td>
+        <td>Correcto</td>
+        <td>Error menor</td>
+        <td>Incorrecto</td>
+      </tr>
+      <tr>
+        <td><strong>Notación</strong></td>
+        <td>Matemática formal</td>
+        <td>Aceptable</td>
+        <td>Informal o confusa</td>
+      </tr>
+      <tr>
+        <td><strong>Justificación</strong></td>
+        <td>Teoremas citados</td>
+        <td>Parcial</td>
+        <td>Sin justificación</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>PARTE II: Desarrollo de Software (60 puntos)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Criterio</th>
+        <th>Puntos</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Visualizador de Riemann funcional</strong></td>
+        <td>15</td>
+        <td>Canvas con rectángulos, curva, ejes y controles interactivos</td>
+      </tr>
+      <tr>
+        <td><strong>Cálculo paso a paso</strong></td>
+        <td>10</td>
+        <td>Desarrollo completo con Δx, tabla, suma y resultado renderizado en KaTeX</td>
+      </tr>
+      <tr>
+        <td><strong>Gráfica de convergencia</strong></td>
+        <td>8</td>
+        <td>Segunda gráfica mostrando convergencia de Sₙ al valor exacto</td>
+      </tr>
+      <tr>
+        <td><strong>Múltiples funciones</strong></td>
+        <td>5</td>
+        <td>Al menos 4 funciones predefinidas + personalizada</td>
+      </tr>
+      <tr>
+        <td><strong>Tabla de convergencia</strong></td>
+        <td>5</td>
+        <td>Tabla con S_izq, S_der, S_med y error para distintos n</td>
+      </tr>
+      <tr>
+        <td><strong>Diseño y UX</strong></td>
+        <td>7</td>
+        <td>Interfaz profesional, responsive, modo oscuro, navegación clara</td>
+      </tr>
+      <tr>
+        <td><strong>Código limpio</strong></td>
+        <td>5</td>
+        <td>Estructura organizada, comentarios, buenas prácticas</td>
+      </tr>
+      <tr>
+        <td><strong>Documentación</strong></td>
+        <td>3</td>
+        <td>README con instrucciones de instalación y uso</td>
+      </tr>
+      <tr>
+        <td><strong>Bonus: animación</strong></td>
+        <td>2</td>
+        <td>Animación de n creciente mostrando convergencia</td>
+      </tr>
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>60</strong></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Escala de Calificación</h3>
+  <div class="grade-scale">
+    <div class="grade-box grade-a">
+      <h4>A</h4>
+      <p>90-100%</p>
+    </div>
+    <div class="grade-box grade-b">
+      <h4>B</h4>
+      <p>80-89%</p>
+    </div>
+    <div class="grade-box grade-c">
+      <h4>C</h4>
+      <p>70-79%</p>
+    </div>
+    <div class="grade-box grade-d">
+      <h4>D</h4>
+      <p>&lt; 70%</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>IntegralLab Pro</strong> — Plataforma Educativa de Cálculo Integral</p>
+  <p>Desarrollado por Jhon Fredy González — 2026</p>
+</footer>
+
+</body>
+</html>
