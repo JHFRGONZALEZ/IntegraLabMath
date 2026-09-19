@@ -285,7 +285,10 @@ export default function IntegralCalculator() {
                 animate={{ opacity: 1 }}
                 className="mt-3 step-card"
               >
-                <span>💡 </span><span dangerouslySetInnerHTML={{ __html: renderMath(problem.hint, false) }} />
+                <div className="text-sm text-slate-300">
+                  <span className="font-semibold text-amber-300">💡 Pista:</span>
+                  <div className="mt-1" dangerouslySetInnerHTML={{ __html: renderMath(problem.hint, false) }} />
+                </div>
               </motion.div>
             )}
           </div>

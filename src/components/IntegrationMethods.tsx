@@ -303,8 +303,10 @@ export default function IntegrationMethods() {
                       </div>
                     ))}
                     <div className="mt-3 pt-3 border-t border-[#0f3460]/30">
-                      <span className="text-sm text-slate-400">Resultado: </span>
-                      <span className="text-emerald-300 font-semibold" dangerouslySetInnerHTML={{ __html: renderMath(ex.result, false) }} />
+                      <div className="text-sm">
+                        <span className="text-slate-400 font-semibold">✅ Resultado:</span>
+                        <div className="mt-1 text-emerald-300 font-semibold" dangerouslySetInnerHTML={{ __html: renderMath(ex.result, false) }} />
+                      </div>
                     </div>
                   </motion.div>
                 )}

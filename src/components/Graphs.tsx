@@ -662,10 +662,21 @@ export default function Graphs() {
         {/* Step 1 */}
         <div className="step-card">
           <h4>PASO 1: IDENTIFICACIÓN</h4>
-          <p className="text-sm text-slate-300 mb-1">Función: <span dangerouslySetInnerHTML={{ __html: renderMath(fnLabel, false) }} /></p>
-          <p className="text-sm text-slate-300 mb-1">Intervalo: <span dangerouslySetInnerHTML={{ __html: renderMath(`[${a},\\,${b}]`, false) }} /></p>
-          <p className="text-sm text-slate-300 mb-1">Subintervalos: <span dangerouslySetInnerHTML={{ __html: renderMath(`n = ${n}`, false) }} /></p>
-          <p className="text-sm text-slate-300">Tipo: <span className="text-purple-300">{TYPE_LABELS[type]}</span></p>
+          <div className="text-sm text-slate-300 mb-2">
+            <span className="font-semibold text-blue-300">Función:</span>
+            <div className="mt-1" dangerouslySetInnerHTML={{ __html: renderMath(fnLabel, false) }} />
+          </div>
+          <div className="text-sm text-slate-300 mb-2">
+            <span className="font-semibold text-blue-300">Intervalo:</span>
+            <div className="mt-1" dangerouslySetInnerHTML={{ __html: renderMath(`[${a},\\,${b}]`, false) }} />
+          </div>
+          <div className="text-sm text-slate-300 mb-2">
+            <span className="font-semibold text-blue-300">Subintervalos:</span>
+            <div className="mt-1" dangerouslySetInnerHTML={{ __html: renderMath(`n = ${n}`, false) }} />
+          </div>
+          <div className="text-sm text-slate-300">
+            <span className="font-semibold text-blue-300">Tipo:</span> <span className="text-purple-300">{TYPE_LABELS[type]}</span>
+          </div>
         </div>
 
         {/* Step 2 */}
@@ -741,7 +752,10 @@ export default function Graphs() {
           <div className="step-card highlight">
             <h4 style={{ color: '#fbbf24' }}>PASO 6: LÍMITE (INTEGRAL EXACTA)</h4>
             <div dangerouslySetInnerHTML={{ __html: renderMath('\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty} S_n', true) }} />
-            <p className="text-sm text-slate-300 mt-2">Antiderivada: <span dangerouslySetInnerHTML={{ __html: renderMath(fnDef.antiLabel, false) }} /></p>
+            <div className="text-sm text-slate-300 mt-3">
+              <span className="font-semibold text-amber-300">Antiderivada:</span>
+              <div className="mt-1" dangerouslySetInnerHTML={{ __html: renderMath(fnDef.antiLabel, false) }} />
+            </div>
             <div dangerouslySetInnerHTML={{ __html: renderMath(`F(${b}) - F(${a}) = ${fnDef.anti(b).toFixed(4)} - ${fnDef.anti(a).toFixed(4)}`, true) }} />
             <div dangerouslySetInnerHTML={{ __html: renderMath(`\\boxed{\\int_{${a}}^{${b}} f(x)\\,dx = ${exactValue.toFixed(6)}}`, true) }} />
           </div>

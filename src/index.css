@@ -44,6 +44,18 @@ body {
   display: inline-block;
 }
 
+/* Asegurar que el texto normal no se vea afectado por KaTeX */
+.step-card p,
+.step-card div,
+.step-card span {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* Solo el contenido de KaTeX usa su propia fuente */
+.katex {
+  font-family: KaTeX_Main, 'Times New Roman', serif !important;
+}
+
 /* Step cards - EXACTAMENTE como en el visualizador original */
 .step-card {
   padding: 12px;
