@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Calculator, BarChart3, Award, GraduationCap, Zap, TrendingUp, Users, Clock } from 'lucide-react';
+import { BookOpen, Calculator, BarChart3, Award, GraduationCap, Zap, TrendingUp, Users, Clock, FileText, ChevronRight } from 'lucide-react';
 import { renderMath } from './Math';
 
-type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications';
+type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications' | 'evaluation';
 
 interface DashboardProps {
   onNavigate: (section: Section) => void;
@@ -22,6 +22,7 @@ const quickActions = [
   { id: 'exercises' as Section, title: 'Banco de Ejercicios', desc: 'Practica con retroalimentación inmediata', icon: Award, gradient: 'from-amber-600 to-orange-600' },
   { id: 'graphs' as Section, title: 'Visualización Gráfica', desc: 'Modelos gráficos interactivos', icon: BarChart3, gradient: 'from-rose-600 to-red-600' },
   { id: 'applications' as Section, title: 'Aplicaciones Reales', desc: 'Áreas, volúmenes, física, economía', icon: Zap, gradient: 'from-indigo-600 to-violet-600' },
+  { id: 'evaluation' as Section, title: '🎯 EVALUACIÓN', desc: 'Problemas de cálculo + proyecto de software', icon: FileText, gradient: 'from-[#e94560] to-red-600' },
 ];
 
 export default function Dashboard({ onNavigate }: DashboardProps) {
@@ -66,6 +67,40 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           </div>
         </div>
       </motion.div>
+
+      {/* Evaluation Banner */}
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        onClick={() => onNavigate('evaluation')}
+        className="w-full relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#e94560]/20 via-red-600/20 to-amber-600/20 border-2 border-[#e94560]/40 p-6 text-left hover:border-[#e94560]/70 transition-all group glow-animation"
+      >
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#e94560] to-red-600 flex items-center justify-center shadow-lg shadow-red-500/30 group-hover:scale-110 transition-transform">
+              <FileText size={28} className="text-white" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded-full bg-[#e94560]/30 text-[#e94560] text-xs font-bold border border-[#e94560]/40 animate-pulse">
+                  NUEVO
+                </span>
+                <h3 className="text-xl font-bold text-white">Evaluación Integral</h3>
+              </div>
+              <p className="text-slate-300 mt-1">
+                Resuelve problemas de cálculo + Construye tu propia plataforma web
+              </p>
+              <div className="flex items-center gap-4 mt-2">
+                <span className="text-xs text-slate-400">📐 Parte I: 40% (Cálculo)</span>
+                <span className="text-xs text-slate-400">💻 Parte II: 60% (Software)</span>
+                <span className="text-xs text-slate-400">⏰ 2 semanas</span>
+              </div>
+            </div>
+          </div>
+          <ChevronRight size={24} className="text-[#e94560] group-hover:translate-x-2 transition-transform" />
+        </div>
+      </motion.button>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
