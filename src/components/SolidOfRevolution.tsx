@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Rotate3D, Play, Pause, RefreshCw } from 'lucide-react';
 
 type Axis = 'x' | 'y';
@@ -58,6 +58,8 @@ export default function SolidOfRevolution() {
 	const [construction, setConstruction] = useState(0.78);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [error, setError] = useState('');
+	const [cameraAngle, setCameraAngle] = useState(0);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	const getFunction = (key: PresetKey, custom: string) => key === 'custom' ? parseFunction(custom) : PRESETS[key].fn;
 
@@ -84,37 +86,143 @@ export default function SolidOfRevolution() {
 		return { points, top, bottom, span, height, volume: Math.abs(volume) };
 	}, [functions, a, b, axis, axisValue]);
 
-	const chart = useMemo(() => {
-		if (!model) return null;
-		const width = 760;
-		const height = 360;
-		const plot = { left: 58, right: 28, top: 32, bottom: 42 };
-		const plotWidth = width - plot.left - plot.right;
-		const plotHeight = height - plot.top - plot.bottom;
-		const xScale = (x: number) => plot.left + ((x - a) / (b - a)) * plotWidth;
-		const yScale = (y: number) => plot.top + plotHeight - ((y - model.bottom) / model.span) * plotHeight;
-		const depthScale = axis === 'x' ? plotHeight / model.span : plotWidth / model.span;
-		const angles = Math.max(2, Math.floor(24 * Math.max(0.04, construction)));
-		const paths = Array.from({ length: angles + 1 }, (_, angleIndex) => {
-			const theta = (angleIndex / 24) * Math.PI * 2;
-			return model.points.map((point) => {
-				if (axis === 'x') {
-					const radius = Math.max(Math.abs(point.upper - axisValue), Math.abs(point.lower - axisValue));
-					const y = axisValue + radius * Math.cos(theta);
-					const depth = radius * Math.sin(theta) * 0.16;
-					return `${xScale(point.x).toFixed(1)},${(yScale(y) + depth * depthScale).toFixed(1)}`;
-				}
-				const radius = Math.abs(point.x - axisValue);
-				const horizontal = axisValue + radius * Math.cos(theta);
-				const depth = radius * Math.sin(theta) * 0.22;
-				return `${(xScale(horizontal) + depth * depthScale).toFixed(1)},${yScale(point.upper).toFixed(1)}`;
-			}).join(' ');
+	useEffect(() => {
+		let frame = 0;
+		const rotate = () => {
+			setCameraAngle((angle) => angle + 0.006);
+			frame = requestAnimationFrame(rotate);
+		};
+		frame = requestAnimationFrame(rotate);
+		return () => cancelAnimationFrame(frame);
+	}, []);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas || !model) return;
+		const host = canvas.parentElement;
+		if (!host) return;
+		const width = Math.max(420, host.clientWidth);
+		const height = Math.max(340, Math.min(520, width * 0.62));
+		const dpr = window.devicePixelRatio || 1;
+		canvas.width = width * dpr;
+		canvas.height = height * dpr;
+		canvas.style.width = `${width}px`;
+		canvas.style.height = `${height}px`;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+		ctx.scale(dpr, dpr);
+
+		const background = ctx.createLinearGradient(0, 0, width, height);
+		background.addColorStop(0, '#071827');
+		background.addColorStop(0.55, '#0b1628');
+		background.addColorStop(1, '#111827');
+		ctx.fillStyle = background;
+		ctx.fillRect(0, 0, width, height);
+
+		const centerX = width / 2;
+		const centerY = height * 0.52;
+		const xMargin = width * 0.12;
+		const xScale = (width - xMargin * 2) / Math.max(b - a, 0.001);
+		const yScale = height * 0.31 / model.span;
+		const depthScale = Math.min(width, height) * 0.11 / model.span;
+		const xToScreen = (x: number) => axis === 'x' ? xMargin + (x - a) * xScale : centerX + (x - axisValue) * xScale * 0.42;
+		const yToScreen = (y: number) => centerY - (y - (model.top + model.bottom) / 2) * yScale;
+		const sweep = Math.max(0.08, construction) * Math.PI * 2;
+		const thetaSteps = 34;
+
+		const project = (x: number, y: number, radius: number, theta: number) => {
+			const angle = theta + cameraAngle;
+			if (axis === 'x') {
+				return {
+					x: xMargin + (x - a) * xScale,
+					y: yToScreen(axisValue + radius * Math.cos(angle)) + radius * Math.sin(angle) * depthScale,
+					depth: Math.sin(angle),
+				};
+			}
+			return {
+				x: centerX + radius * Math.cos(angle) * xScale * 0.42,
+				y: yToScreen(y) + radius * Math.sin(angle) * depthScale,
+				depth: Math.sin(angle),
+			};
+		};
+
+		// Floor grid gives the volume a stable spatial reference.
+		ctx.strokeStyle = 'rgba(100, 116, 139, 0.18)';
+		ctx.lineWidth = 1;
+		for (let row = 0; row < 6; row += 1) {
+			const y = centerY + row * 18;
+			ctx.beginPath();
+			ctx.moveTo(xMargin, y);
+			ctx.lineTo(width - xMargin, y);
+			ctx.stroke();
+		}
+		for (let column = 0; column < 9; column += 1) {
+			const x = xMargin + (column / 8) * (width - xMargin * 2);
+			ctx.beginPath();
+			ctx.moveTo(x, centerY);
+			ctx.lineTo(x + (x - centerX) * 0.16, centerY + 95);
+			ctx.stroke();
+		}
+
+		// Draw many translucent quadrilateral faces. Their depth-dependent color makes the body read as 3D.
+		for (let angleIndex = 0; angleIndex < thetaSteps; angleIndex += 1) {
+			const theta = (angleIndex / thetaSteps) * sweep;
+			const nextTheta = ((angleIndex + 1) / thetaSteps) * sweep;
+			const shade = 0.24 + Math.max(0, Math.sin(theta + cameraAngle)) * 0.42;
+			ctx.fillStyle = axis === 'x' ? `rgba(34, 211, 238, ${shade})` : `rgba(167, 139, 250, ${shade})`;
+			ctx.strokeStyle = axis === 'x' ? 'rgba(103, 232, 249, 0.22)' : 'rgba(196, 181, 253, 0.22)';
+			for (let pointIndex = 0; pointIndex < model.points.length - 1; pointIndex += 1) {
+				const current = model.points[pointIndex];
+				const next = model.points[pointIndex + 1];
+				const currentRadius = axis === 'x' ? Math.max(Math.abs(current.upper - axisValue), Math.abs(current.lower - axisValue)) : Math.abs(current.x - axisValue);
+				const nextRadius = axis === 'x' ? Math.max(Math.abs(next.upper - axisValue), Math.abs(next.lower - axisValue)) : Math.abs(next.x - axisValue);
+				const p1 = project(current.x, current.upper, currentRadius, theta);
+				const p2 = project(next.x, next.upper, nextRadius, theta);
+				const p3 = project(next.x, next.upper, nextRadius, nextTheta);
+				const p4 = project(current.x, current.upper, currentRadius, nextTheta);
+				ctx.beginPath();
+				ctx.moveTo(p1.x, p1.y);
+				ctx.lineTo(p2.x, p2.y);
+				ctx.lineTo(p3.x, p3.y);
+				ctx.lineTo(p4.x, p4.y);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			}
+		}
+
+		// Region outline and rotation axis remain visible above the mesh.
+		ctx.setLineDash([8, 6]);
+		ctx.strokeStyle = '#fbbf24';
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		if (axis === 'x') {
+			ctx.moveTo(xMargin, yToScreen(axisValue));
+			ctx.lineTo(width - xMargin, yToScreen(axisValue));
+		} else {
+			ctx.moveTo(centerX, 35);
+			ctx.lineTo(centerX, height - 44);
+		}
+		ctx.stroke();
+		ctx.setLineDash([]);
+
+		ctx.strokeStyle = 'rgba(224, 242, 254, 0.7)';
+		ctx.lineWidth = 1.5;
+		ctx.beginPath();
+		model.points.forEach((point, index) => {
+			const projected = project(point.x, point.upper, axis === 'x' ? Math.abs(point.upper - axisValue) : Math.abs(point.x - axisValue), 0);
+			if (index === 0) ctx.moveTo(projected.x, projected.y);
+			else ctx.lineTo(projected.x, projected.y);
 		});
-		const upperPath = model.points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${xScale(point.x).toFixed(1)} ${yScale(point.upper).toFixed(1)}`).join(' ');
-		const lowerPath = model.points.slice().reverse().map((point) => `L ${xScale(point.x).toFixed(1)} ${yScale(point.lower).toFixed(1)}`).join(' ');
-		const axisPath = axis === 'x' ? `M ${plot.left} ${yScale(axisValue)} L ${plot.left + plotWidth} ${yScale(axisValue)}` : `M ${xScale(axisValue)} ${plot.top} L ${xScale(axisValue)} ${plot.top + plotHeight}`;
-		return { width, height, plot, plotWidth, plotHeight, paths, upperPath, lowerPath, axisPath };
-	}, [model, a, b, axis, axisValue, construction]);
+		ctx.stroke();
+
+		ctx.fillStyle = '#e2e8f0';
+		ctx.font = '600 13px sans-serif';
+		ctx.fillText(axis === 'x' ? `Superficie alrededor de y = ${formatNumber(axisValue)}` : `Superficie alrededor de x = ${formatNumber(axisValue)}`, 20, 24);
+		ctx.fillStyle = '#94a3b8';
+		ctx.font = '12px sans-serif';
+		ctx.fillText('La cámara rota lentamente para mostrar profundidad', 20, height - 16);
+	}, [model, a, b, axis, axisValue, construction, cameraAngle]);
 
 	const axisLimit = axis === 'x' ? model?.bottom ?? -2 : a - (b - a) * 0.25;
 	const axisMax = axis === 'x' ? model?.top ?? 2 : b + (b - a) * 0.25;
@@ -158,8 +266,8 @@ export default function SolidOfRevolution() {
 					<div className="grid grid-cols-2 gap-2"><button onClick={toggleConstruction} className="flex items-center justify-center gap-2 rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400">{isPlaying ? <Pause size={15} /> : <Play size={15} />}{isPlaying ? 'Pausar' : 'Construir'}</button><button onClick={recalculate} className="flex items-center justify-center gap-2 rounded-lg bg-slate-700 px-3 py-2 text-sm text-slate-200 hover:bg-slate-600"><RefreshCw size={15} /> Reiniciar</button></div>
 					{error && <p className="rounded-lg border border-red-400/30 bg-red-500/10 p-2 text-xs text-red-200">{error}</p>}
 				</div>
-				<div className="min-w-0 rounded-xl border border-slate-700/70 bg-[#08111f] p-2">
-					{chart && model ? <svg viewBox={`0 0 ${chart.width} ${chart.height}`} className="h-auto w-full" role="img" aria-label="Construcción visual del sólido de revolución"><defs><linearGradient id="solidFill" x1="0" x2="1"><stop offset="0" stopColor="#22d3ee" stopOpacity=".18" /><stop offset=".5" stopColor="#3b82f6" stopOpacity=".42" /><stop offset="1" stopColor="#a78bfa" stopOpacity=".2" /></linearGradient></defs><rect width={chart.width} height={chart.height} fill="#08111f" /><path d={chart.axisPath} stroke="#fbbf24" strokeWidth="2" strokeDasharray="7 5" />{chart.paths.map((path, index) => <polyline key={index} points={path} fill="none" stroke={index % 2 ? '#60a5fa' : '#22d3ee'} strokeOpacity={0.2 + (index / Math.max(chart.paths.length, 1)) * 0.55} strokeWidth="1.4" />)}<path d={`${chart.upperPath} ${chart.lowerPath} Z`} fill="url(#solidFill)" stroke="#67e8f9" strokeOpacity=".65" strokeWidth="1.5" /><text x="18" y="24" fill="#cbd5e1" fontSize="12">{axis === 'x' ? 'Rotación alrededor de y = ' : 'Rotación alrededor de x = '}{formatNumber(axisValue)}</text><text x="18" y={chart.height - 14} fill="#64748b" fontSize="11">Región generadora entre {formatNumber(a)} y {formatNumber(b)}</text></svg> : <div className="flex min-h-[360px] items-center justify-center text-sm text-red-200">No se puede construir el sólido con esas funciones.</div>}
+				<div className="min-w-0 overflow-hidden rounded-xl border border-slate-700/70 bg-[#08111f] p-2">
+					{model ? <canvas ref={canvasRef} className="block h-auto w-full rounded-lg" role="img" aria-label="Construcción tridimensional del sólido de revolución" /> : <div className="flex min-h-[360px] items-center justify-center text-sm text-red-200">No se puede construir el sólido con esas funciones.</div>}
 					<div className="flex flex-wrap items-center gap-4 px-3 pb-2 pt-1 text-xs text-slate-400"><span><i className="mr-1 inline-block h-2 w-2 rounded-full bg-cyan-300" />Superficie generada</span><span><i className="mr-1 inline-block h-2 w-2 rounded-full bg-amber-300" />Eje de giro</span><span>{axis === 'x' ? 'Método de arandelas' : 'Método de cascarones'}</span></div>
 				</div>
 			</div>
