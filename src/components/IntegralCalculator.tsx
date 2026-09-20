@@ -135,20 +135,59 @@ export default function IntegralCalculator() {
 
   const problem = problems[selectedProblem];
 
+  const normalizeInput = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/\\/g, '')
+      .replace(/\s+/g, '')
+      .replace(/\*/g, '')
+      .replace(/\^\(/g, '^(')
+      .replace(/\|/g, '')
+      .replace(/\s*\+\s*c\s*$/g, '+c')
+      .replace(/\s*\+\s*\$\s*$/g, '')
+      .replace(/\{\}/g, '')
+      .replace(/\((\w+)\)/g, '($1)');
+
+  const validateAnswer = (id: number, value: string) => {
+    const normalized = normalizeInput(value);
+    if (!normalized) return false;
+
+    const checks: Record<number, Array<(s: string) => boolean>> = {
+      1: [
+        (s) => s.includes('x^4/4+c') || s.includes('x^4/4+c') || s.includes('x^4/4+c') || s.includes('x^4/4+c'),
+        (s) => s.includes('x^4/4') && s.includes('c'),
+      ],
+      2: [
+        (s) => s.includes('x^3+x^2-5x+c'),
+        (s) => s.includes('x^3') && s.includes('x^2') && s.includes('-5x') && s.includes('c'),
+      ],
+      3: [
+        (s) => s.includes('e^(x^2)+c') || s.includes('e^(x^2)+c'),
+        (s) => s.includes('e^(x^2)') && s.includes('c'),
+      ],
+      4: [
+        (s) => s.includes('xsin(x)+cos(x)+c') || s.includes('xsin(x)+cos(x)') || s.includes('xsin(x)') && s.includes('cos(x)') && s.includes('c'),
+      ],
+      5: [
+        (s) => s.includes('1/2arctan(x/2)+c') || s.includes('arctan(x/2)+c') || s.includes('arctan(x/2)') && s.includes('c'),
+      ],
+      6: [
+        (s) => s.includes('x/2-sin(2x)/4+c') || s.includes('x/2') && s.includes('sin(2x)') && s.includes('c'),
+      ],
+      7: [
+        (s) => s.includes('xln(x)-x+c') || s.includes('xln(x)-x') && s.includes('c'),
+      ],
+      8: [
+        (s) => s.includes('5/6ln((x-3)/(x+3))+c') || s.includes('ln') && s.includes('x-3') && s.includes('x+3') && s.includes('c'),
+      ],
+    };
+
+    return (checks[id] ?? []).some((matcher) => matcher(normalized));
+  };
+
   const checkAnswer = () => {
-    const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
-    const userNorm = normalize(userAnswer);
-    
-    const correct = userNorm.includes('x^4/4') && problem.id === 1 ||
-                    userNorm.includes('x^3') && userNorm.includes('x^2') && problem.id === 2 ||
-                    userNorm.includes('e^(x^2)') && problem.id === 3 ||
-                    userNorm.includes('x*sin(x)') && userNorm.includes('cos(x)') && problem.id === 4 ||
-                    userNorm.includes('arctan(x/2)') && problem.id === 5 ||
-                    userNorm.includes('x/2') && userNorm.includes('sin(2x)') && problem.id === 6 ||
-                    userNorm.includes('x*ln(x)') && userNorm.includes('-x') && problem.id === 7 ||
-                    userNorm.includes('ln|') && problem.id === 8;
-    
-    setIsCorrect(correct || userAnswer.trim().length > 0);
+    const correct = validateAnswer(problem.id, userAnswer);
+    setIsCorrect(correct);
     setShowResult(true);
   };
 

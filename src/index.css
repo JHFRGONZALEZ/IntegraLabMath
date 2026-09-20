@@ -8,9 +8,20 @@
 
 body {
   font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: #1a1a2e;
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.16), transparent 30%),
+    #0f172a;
   color: #e2e8f0;
   min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button, input, select {
+  transition: all 0.2s ease;
 }
 
 ::-webkit-scrollbar {
@@ -31,7 +42,12 @@ body {
   background: #e94560;
 }
 
-/* Estilos de KaTeX - EXACTAMENTE como en el visualizador original */
+::selection {
+  background: rgba(59, 130, 246, 0.35);
+  color: white;
+}
+
+/* Estilos de KaTeX */
 .math-block {
   background: rgba(15, 52, 96, 0.5);
   padding: 16px;
@@ -40,23 +56,32 @@ body {
   margin: 8px 0;
 }
 
+.math-block .katex {
+  font-size: 1.3em;
+}
+
 .math-inline {
   display: inline-block;
 }
 
-/* Asegurar que el texto normal no se vea afectado por KaTeX */
-.step-card p,
-.step-card div,
-.step-card span {
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif !important;
+.math-inline .katex {
+  font-size: 1.1em;
 }
 
-/* Solo el contenido de KaTeX usa su propia fuente */
+/* Do not override KaTeX's internal font metrics with card typography. */
 .katex {
-  font-family: KaTeX_Main, 'Times New Roman', serif !important;
+  color: inherit;
+  text-rendering: auto;
 }
 
-/* Step cards - EXACTAMENTE como en el visualizador original */
+.katex-display {
+  margin: 0.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+}
+
+/* Step cards */
 .step-card {
   padding: 12px;
   background: rgba(15, 52, 96, 0.3);
@@ -71,11 +96,15 @@ body {
   margin-bottom: 8px;
 }
 
-.step-card p,
-.step-card div {
+.step-card > p,
+.step-card > div {
   font-size: 13px;
   color: #cbd5e1;
   margin-bottom: 4px;
+}
+
+.step-card > div > .katex-display {
+  margin-bottom: 0;
 }
 
 .step-card.highlight {

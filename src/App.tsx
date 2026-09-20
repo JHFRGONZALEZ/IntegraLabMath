@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, BookOpen, Calculator, BarChart3, Award, 
   GraduationCap, ChevronRight, Menu, X, Zap, FileText
 } from 'lucide-react';
-import Dashboard from './components/Dashboard';
-import Theory from './components/Theory';
-import IntegrationMethods from './components/IntegrationMethods';
-import IntegralCalculator from './components/IntegralCalculator';
-import Exercises from './components/Exercises';
-import Graphs from './components/Graphs';
-import Applications from './components/Applications';
-import Evaluation from './components/Evaluation';
+
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const Theory = lazy(() => import('./components/Theory'));
+const IntegrationMethods = lazy(() => import('./components/IntegrationMethods'));
+const IntegralCalculator = lazy(() => import('./components/IntegralCalculator'));
+const Exercises = lazy(() => import('./components/Exercises'));
+const Graphs = lazy(() => import('./components/Graphs'));
+const Applications = lazy(() => import('./components/Applications'));
+const Evaluation = lazy(() => import('./components/Evaluation'));
 
 type Section = 'dashboard' | 'theory' | 'methods' | 'calculator' | 'exercises' | 'graphs' | 'applications' | 'evaluation';
 
@@ -31,17 +32,18 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const renderSection = () => {
-    switch (activeSection) {
-      case 'dashboard': return <Dashboard onNavigate={setActiveSection} />;
-      case 'theory': return <Theory />;
-      case 'methods': return <IntegrationMethods />;
-      case 'calculator': return <IntegralCalculator />;
-      case 'exercises': return <Exercises />;
-      case 'graphs': return <Graphs />;
-      case 'applications': return <Applications />;
-      case 'evaluation': return <Evaluation />;
-      default: return <Dashboard onNavigate={setActiveSection} />;
-    }
+    const sectionMap = {
+      dashboard: <Dashboard onNavigate={setActiveSection} />,
+      theory: <Theory />,
+      methods: <IntegrationMethods />,
+      calculator: <IntegralCalculator />,
+      exercises: <Exercises />,
+      graphs: <Graphs />,
+      applications: <Applications />,
+      evaluation: <Evaluation />,
+    } as const;
+
+    return sectionMap[activeSection] ?? sectionMap.dashboard;
   };
 
   return (
@@ -144,17 +146,26 @@ export default function App() {
 
         {/* Content */}
         <div className="p-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeSection}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderSection()}
-            </motion.div>
-          </AnimatePresence>
+          <Suspense fallback={
+            <div className="flex min-h-[60vh] items-center justify-center rounded-2xl border border-slate-700/50 bg-slate-800/60">
+              <div className="flex items-center gap-3 text-slate-300">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
+                  Cargando modulo...
+              </div>
+            </div>
+          }>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSection}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderSection()}
+              </motion.div>
+            </AnimatePresence>
+          </Suspense>
         </div>
       </main>
     </div>
