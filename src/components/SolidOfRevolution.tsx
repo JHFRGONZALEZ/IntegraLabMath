@@ -3,6 +3,7 @@ import { Rotate3D, Play, Pause, RefreshCw } from 'lucide-react';
 
 type Axis = 'x' | 'y';
 type PresetKey = 'line' | 'parabola' | 'sqrt' | 'sin' | 'custom';
+type ConstructionPhase = 'region' | 'building' | 'solid';
 
 interface Preset {
 	label: string;
@@ -57,6 +58,7 @@ export default function SolidOfRevolution() {
 	const [axisValue, setAxisValue] = useState(0);
 	const [construction, setConstruction] = useState(0.78);
 	const [isPlaying, setIsPlaying] = useState(false);
+	const [phase, setPhase] = useState<ConstructionPhase>('region');
 	const [error, setError] = useState('');
 	const [cameraAngle, setCameraAngle] = useState(0);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -127,7 +129,7 @@ export default function SolidOfRevolution() {
 		const depthScale = Math.min(width, height) * 0.11 / model.span;
 		const xToScreen = (x: number) => axis === 'x' ? xMargin + (x - a) * xScale : centerX + (x - axisValue) * xScale * 0.42;
 		const yToScreen = (y: number) => centerY - (y - (model.top + model.bottom) / 2) * yScale;
-		const sweep = Math.max(0.08, construction) * Math.PI * 2;
+		const sweep = phase === 'region' ? 0 : Math.max(0.04, construction) * Math.PI * 2;
 		const thetaSteps = 34;
 
 		const project = (x: number, y: number, radius: number, theta: number) => {
@@ -162,6 +164,49 @@ export default function SolidOfRevolution() {
 			ctx.moveTo(x, centerY);
 			ctx.lineTo(x + (x - centerX) * 0.16, centerY + 95);
 			ctx.stroke();
+		}
+
+		// Before rotation, show the actual bounded 2D region between f(x) and g(x).
+		if (phase === 'region') {
+			ctx.beginPath();
+			model.points.forEach((point, index) => {
+				const x = xMargin + (point.x - a) * xScale;
+				const y = yToScreen(point.upper);
+				if (index === 0) ctx.moveTo(x, y);
+				else ctx.lineTo(x, y);
+			});
+			model.points.slice().reverse().forEach((point) => {
+				ctx.lineTo(xMargin + (point.x - a) * xScale, yToScreen(point.lower));
+			});
+			ctx.closePath();
+			const regionFill = ctx.createLinearGradient(0, 0, width, 0);
+			regionFill.addColorStop(0, 'rgba(45, 212, 191, 0.58)');
+			regionFill.addColorStop(1, 'rgba(59, 130, 246, 0.58)');
+			ctx.fillStyle = regionFill;
+			ctx.fill();
+			ctx.strokeStyle = '#67e8f9';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+			ctx.setLineDash([8, 6]);
+			ctx.strokeStyle = '#fbbf24';
+			ctx.lineWidth = 2;
+			ctx.beginPath();
+			if (axis === 'x') {
+				ctx.moveTo(xMargin, yToScreen(axisValue));
+				ctx.lineTo(width - xMargin, yToScreen(axisValue));
+			} else {
+				ctx.moveTo(centerX, 35);
+				ctx.lineTo(centerX, height - 44);
+			}
+			ctx.stroke();
+			ctx.setLineDash([]);
+			ctx.fillStyle = '#e2e8f0';
+			ctx.font = '600 14px sans-serif';
+			ctx.fillText('Región plana generadora', 20, 24);
+			ctx.fillStyle = '#94a3b8';
+			ctx.font = '12px sans-serif';
+			ctx.fillText('Pulsa "Construir" para girar esta región', 20, height - 16);
+			return;
 		}
 
 		// Draw many translucent quadrilateral faces. Their depth-dependent color makes the body read as 3D.
@@ -218,22 +263,24 @@ export default function SolidOfRevolution() {
 
 		ctx.fillStyle = '#e2e8f0';
 		ctx.font = '600 13px sans-serif';
-		ctx.fillText(axis === 'x' ? `Superficie alrededor de y = ${formatNumber(axisValue)}` : `Superficie alrededor de x = ${formatNumber(axisValue)}`, 20, 24);
+		ctx.fillText(phase === 'building' ? 'Construcción del sólido en progreso' : 'Sólido de revolución terminado', 20, 24);
 		ctx.fillStyle = '#94a3b8';
 		ctx.font = '12px sans-serif';
 		ctx.fillText('La cámara rota lentamente para mostrar profundidad', 20, height - 16);
-	}, [model, a, b, axis, axisValue, construction, cameraAngle]);
+	}, [model, a, b, axis, axisValue, construction, cameraAngle, phase]);
 
 	const axisLimit = axis === 'x' ? model?.bottom ?? -2 : a - (b - a) * 0.25;
 	const axisMax = axis === 'x' ? model?.top ?? 2 : b + (b - a) * 0.25;
 
 	const toggleConstruction = () => {
 		if (isPlaying) { setIsPlaying(false); return; }
+		setPhase('building');
+		setConstruction(0.02);
 		setIsPlaying(true);
-		let current = construction;
+		let current = 0.02;
 		const step = () => {
 			current += 0.025;
-			if (current >= 1) { setConstruction(1); setIsPlaying(false); return; }
+			if (current >= 1) { setConstruction(1); setPhase('solid'); setIsPlaying(false); return; }
 			setConstruction(current);
 			requestAnimationFrame(step);
 		};
@@ -243,7 +290,8 @@ export default function SolidOfRevolution() {
 	const recalculate = () => {
 		if (a >= b || !functions) { setError('Revisa las funciones y asegúrate de que a sea menor que b.'); return; }
 		setError('');
-		setConstruction(0.08);
+		setConstruction(0);
+		setPhase('region');
 		setIsPlaying(false);
 	};
 
