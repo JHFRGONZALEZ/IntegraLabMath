@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Ruler, Box, Gauge, DollarSign, Atom, Droplets } from 'lucide-react';
 import { renderMath } from './Math';
+import SolidOfRevolution from './SolidOfRevolution';
 
 interface Application {
   id: string;
@@ -208,6 +209,10 @@ export default function Applications() {
           );
         })}
       </div>
+
+      {selectedApp === 'volume' && (
+        <SolidOfRevolution />
+      )}
 
       {/* App Detail */}
       <motion.div
